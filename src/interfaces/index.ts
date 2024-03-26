@@ -17,3 +17,14 @@ export interface FormData {
   email: string;
   password: string;
 }
+
+export interface InputProps {
+  id?: string;
+  type?: TypeInput;
+  value: string;
+  placeholder: string;
+  error?: string;
+  isPassword?: boolean;
+  onTogglePassword?: () => void;
+  icon?: React.ReactNode;
+}

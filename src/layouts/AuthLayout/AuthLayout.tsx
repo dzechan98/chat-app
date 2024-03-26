@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import Logo from "@/components/Logo";
 import { Link, useNavigate } from "react-router-dom";
-import SignInMethod from "@/components/SignInMethod";
-import Hr from "@/components/Hr";
 import { useAuth } from "@/contexts/AuthContext";
 import { paths } from "@/constants";
+import { Logo } from "@/components/Logo";
+import { SignInMethod } from "@/components/SignInMethod";
+import { Hr } from "@/components/Hr";
 
 interface AuthLayoutProps {
   title: string;

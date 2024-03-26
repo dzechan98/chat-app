@@ -1,10 +1,23 @@
-import { routes } from "@/routes";
+import { RequireAuth } from "@/components/RequireAuth";
+import { DefaultLayout } from "@/layouts/DefaultLayout";
+import { privateRoutes, publicRoutes } from "@/routes";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <Routes>
-      {routes.map((route) => (
+      <Route
+        element={
+          <RequireAuth>
+            <DefaultLayout />
+          </RequireAuth>
+        }
+      >
+        {privateRoutes.map((route) => (
+          <Route key={route.id} path={route.path} element={route.element} />
+        ))}
+      </Route>
+      {publicRoutes.map((route) => (
         <Route key={route.id} path={route.path} element={route.element} />
       ))}
     </Routes>

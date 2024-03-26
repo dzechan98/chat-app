@@ -59,3 +59,7 @@ button {
   border: none;
   outline: none;
 }
+
+*::-webkit-scrollbar {
+  width: 0;
+}

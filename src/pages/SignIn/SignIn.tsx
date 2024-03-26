@@ -1,10 +1,6 @@
 import { useState } from "react";
-import Button from "@/components/Button";
-import Checkbox from "@/components/Checkbox";
-import Field from "@/components/Field";
 import { paths } from "@/constants";
 import { FormData, Size, TypeInput } from "@/interfaces";
-import AuthLayout from "@/layouts/AuthLayout";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { Controller, useForm } from "react-hook-form";
@@ -13,7 +9,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/configs/firebase";
 import { useAuth } from "@/contexts/AuthContext";
-import Loading from "@/components/Loading";
+import { Loading } from "@/components/Loading";
+import { Field } from "@/components/Field";
+import { Checkbox } from "@/components/Checkbox";
+import { Button } from "@/components/Button";
+import { AuthLayout } from "@/layouts/AuthLayout";
 
 const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 export const validationSchema = yup

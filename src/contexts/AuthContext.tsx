@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, SignOutUser } from "@/configs/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
+import {
+  getDataFromLocalStorage,
+  saveDataToLocalStorage,
+} from "@/utils/localStorageUtil";
 
 type UserContextType = {
   currentUser: User | null;
@@ -11,7 +15,9 @@ type UserContextType = {
 const AuthContext = createContext<UserContextType>({} as UserContextType);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(
+    getDataFromLocalStorage("user")
+  );
 
   const signOut = () => {
     SignOutUser();
@@ -23,6 +29,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setCurrentUser(user);
     });
   }, []);
+
+  useEffect(() => {
+    saveDataToLocalStorage("user", currentUser);
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider value={{ currentUser, setCurrentUser, signOut }}>

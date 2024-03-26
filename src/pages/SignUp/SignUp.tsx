@@ -1,18 +1,18 @@
 import { useState } from "react";
-import Button from "@/components/Button";
-import Field from "@/components/Field";
 import { paths } from "@/constants";
 import { FormData, Size, TypeInput } from "@/interfaces";
-import AuthLayout from "@/layouts/AuthLayout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/configs/firebase";
-import { validationSchema } from "@/pages/SignIn";
-import Loading from "@/components/Loading";
 import { useAuth } from "@/contexts/AuthContext";
+import { Field } from "@/components/Field";
+import { Loading } from "@/components/Loading";
+import { Button } from "@/components/Button";
+import { AuthLayout } from "@/layouts/AuthLayout";
+import { validationSchema } from "@/pages/SignIn/SignIn";
 
 const SignUp = () => {
   const {
