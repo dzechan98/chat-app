@@ -11,6 +11,7 @@ export const privateRoutes = [
     element: <Home />,
   },
   { id: 2, path: paths.chat, element: <Chat /> },
+  { id: 3, path: `${paths.chat}/:roomId`, element: <Chat /> },
 ];
 
 export const publicRoutes = [

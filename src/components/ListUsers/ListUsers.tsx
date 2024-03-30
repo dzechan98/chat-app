@@ -1,5 +1,8 @@
-import { Avatar } from "@/components/Avatar";
 import React from "react";
+import { Avatar } from "@/components/Avatar";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import { Navigation } from "swiper/modules";
 
 const ListUsers = () => {
   const listUser = [
@@ -66,21 +69,28 @@ const ListUsers = () => {
   ];
 
   return (
-    <div className="flex items-center gap-2 h-[120px] overflow-y-auto">
+    <Swiper
+      slidesPerView={4}
+      spaceBetween={6}
+      navigation={true}
+      modules={[Navigation]}
+      className="w-full"
+    >
       {listUser.map((user) => (
-        <div
-          key={user.id}
-          className="relative h-14 w-[calc(25%-6px)] bg-light-400 rounded-md flex-shrink-0"
-        >
-          <h2 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-main-100 font-medium">
-            {user.name.split(" ")[0]}
-          </h2>
-          <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <Avatar url={user.url} iconActive active />
+        <SwiperSlide key={user.id}>
+          <div className="w-full h-[120px] flex items-center">
+            <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
+              <h2 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-main-100 font-medium">
+                {user.name.split(" ")[0]}
+              </h2>
+              <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <Avatar url={user.url} iconActive active />
+              </div>
+            </div>
           </div>
-        </div>
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 };
 

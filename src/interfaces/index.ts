@@ -10,7 +10,11 @@ export enum TypeInput {
 }
 
 export interface User {
-  userId: string;
+  userId?: string;
+  displayName?: string | null;
+  photoURL?: string | null;
+  active?: boolean;
+  keyword?: string[];
 }
 
 export interface FormData {
@@ -27,4 +31,17 @@ export interface InputProps {
   isPassword?: boolean;
   onTogglePassword?: () => void;
   icon?: React.ReactNode;
+}
+
+export interface TypeMessage {
+  sender: string;
+  content: string;
+  avatar: string;
+  time: string;
+}
+
+export interface Room {
+  roomId: string;
+  members: string[];
+  messages: TypeMessage[];
 }

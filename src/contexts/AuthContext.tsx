@@ -1,10 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, SignOutUser } from "@/configs/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import {
-  getDataFromLocalStorage,
-  saveDataToLocalStorage,
-} from "@/utils/localStorageUtil";
+import { getDataFromLocalStorage, saveDataToLocalStorage } from "@/utils";
+import { updateUser } from "@/apis";
 
 type UserContextType = {
   currentUser: User | null;
@@ -19,9 +17,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     getDataFromLocalStorage("user")
   );
 
-  const signOut = () => {
-    SignOutUser();
-    setCurrentUser(null);
+  const signOut = async () => {
+    if (currentUser) {
+      SignOutUser();
+      setCurrentUser(null);
+      updateUser(currentUser.uid, {
+        active: false,
+      });
+    }
   };
 
   useEffect(() => {
@@ -32,6 +35,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     saveDataToLocalStorage("user", currentUser);
+    if (currentUser) {
+      updateUser(currentUser.uid, { active: true });
+    }
   }, [currentUser]);
 
   return (

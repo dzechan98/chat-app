@@ -1,4 +1,3 @@
-import React from "react";
 import { Avatar } from "@/components/Avatar";
 
 const ListUserChats = () => {
@@ -80,7 +79,7 @@ const ListUserChats = () => {
       {listUses.map((user) => (
         <div
           key={user.id}
-          className="flex items-center gap-2 p-4 hover:bg-light-400 rounded-md"
+          className="flex items-center gap-2 p-4 hover:bg-light-400 rounded-md cursor-pointer"
         >
           <Avatar url={user.url} iconActive active={user.active} />
           <div className="flex flex-col">

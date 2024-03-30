@@ -4,7 +4,7 @@ import { Search } from "@/components/Search";
 
 const Chat = () => {
   return (
-    <div className="min-w-[380px] h-screen pt-6 bg-light-100">
+    <div className="max-w-[380px] h-screen pt-6 bg-light-100">
       <h2 className="px-6 text-main-100 text-xl font-medium">Chats</h2>
       <div className="px-6">
         <Search placeholder="Search messages or users" />

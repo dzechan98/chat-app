@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { paths } from "@/constants";
-import { FormData, Size, TypeInput } from "@/interfaces";
+import { FormData, Size, TypeInput, User } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { MdOutlineMailOutline } from "react-icons/md";
@@ -9,10 +9,13 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/configs/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Field } from "@/components/Field";
-import { Loading } from "@/components/Loading";
 import { Button } from "@/components/Button";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { validationSchema } from "@/pages/SignIn/SignIn";
+import { addUser } from "@/apis";
+import defaultUserImage from "@/assets/default-user.png";
+import { generateKeywords } from "@/utils";
+import { LoadingSpinner } from "@/components/Loading";
 
 const SignUp = () => {
   const {
@@ -44,7 +47,18 @@ const SignUp = () => {
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, {
           displayName,
+          photoURL: defaultUserImage,
         });
+
+        const dataUser: User = {
+          userId: res.user.uid,
+          displayName,
+          photoURL: defaultUserImage,
+          active: true,
+          keyword: generateKeywords(displayName),
+        };
+
+        await addUser(dataUser);
         setCurrentUser(res.user);
       }
     } catch (error) {
@@ -98,7 +112,7 @@ const SignUp = () => {
         />
         <div className="my-6">
           <Button fullwidth type="submit" size={Size.small} disabled={!isValid}>
-            {isSubmitting ? <Loading /> : "Register"}
+            {isSubmitting ? <LoadingSpinner /> : "Register"}
           </Button>
         </div>
         <p className="text-center text-sm text-main-200">

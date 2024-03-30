@@ -9,11 +9,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/configs/firebase";
 import { useAuth } from "@/contexts/AuthContext";
-import { Loading } from "@/components/Loading";
 import { Field } from "@/components/Field";
 import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { AuthLayout } from "@/layouts/AuthLayout";
+import { LoadingSpinner } from "@/components/Loading";
 
 const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 export const validationSchema = yup
@@ -111,7 +111,7 @@ const SignIn = () => {
           setChecked={setChecked}
         />
         <Button fullwidth type="submit" size={Size.small} disabled={!isValid}>
-          {isSubmitting ? <Loading /> : "Sign in"}
+          {isSubmitting ? <LoadingSpinner /> : "Sign in"}
         </Button>
       </form>
     </AuthLayout>

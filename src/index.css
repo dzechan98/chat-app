@@ -63,3 +63,17 @@ button {
 *::-webkit-scrollbar {
   width: 0;
 }
+
+.swiper-button-prev {
+  left: 0 !important;
+}
+
+.swiper-button-next {
+  right: 0 !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px !important;
+  color: #7269ef;
+}

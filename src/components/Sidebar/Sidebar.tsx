@@ -47,7 +47,7 @@ const Sidebar = () => {
   // ];
 
   return (
-    <div className="py-8 min-w-[75px] flex items-center justify-between flex-col h-screen shadow-xl">
+    <div className="py-8 w-[75px] max-w-[75px] flex items-center justify-between flex-col h-screen shadow-xl">
       <Logo logoString={false} />
       <div className="center flex-col gap-2">
         {menuSidebar.map((item) => (
@@ -63,7 +63,7 @@ const Sidebar = () => {
         ))}
       </div>
       <div className="center flex-col gap-4">
-        {/* <Button onClick={signOut}>Sign out</Button> */}
+        <Button onClick={signOut}>Sign out</Button>
         <span className="block p-4 text-lg cursor-pointer">
           <MdOutlineLightMode className="text-2xl" />
         </span>

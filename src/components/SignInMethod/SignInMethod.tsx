@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { addUser, checkUserExists } from "@/apis";
 import { FacebookIcon, GoogleIcon } from "@/components/Icon";
 import { auth } from "@/configs/firebase";
 import { useAuth } from "@/contexts/AuthContext";
+import { User } from "@/interfaces";
+import { generateKeywords } from "@/utils";
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
@@ -15,8 +18,21 @@ const SignInMethod = () => {
 
   const handleSignIn = (provider: Provider) => {
     signInWithPopup(auth, provider)
-      .then((result) => {
-        setCurrentUser(result.user);
+      .then(async (result) => {
+        const user = result.user;
+        setCurrentUser(user);
+        const check = await checkUserExists(user.uid);
+        const dataUser: User = {
+          userId: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          active: true,
+          keyword: generateKeywords(user.displayName as string),
+        };
+
+        if (!check) {
+          await addUser(dataUser);
+        }
       })
       .catch((_error) => {});
   };

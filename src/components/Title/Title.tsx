@@ -1,14 +1,15 @@
 import React from "react";
 
 interface TitleProps {
-  children: React.ReactNode;
   className?: string;
+  children: React.ReactNode;
 }
 
-const Title: React.FC<TitleProps> = ({ children, className }) => {
-  return (
-    <h2 className={`font-medium text-main-100 ${className}`}>{children}</h2>
-  );
+const Title: React.FC<TitleProps> = ({
+  className = "text-main-100",
+  children,
+}) => {
+  return <h2 className={`font-medium ${className}`}>{children}</h2>;
 };
 
 export default Title;
