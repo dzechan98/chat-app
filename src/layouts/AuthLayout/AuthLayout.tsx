@@ -25,6 +25,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
 }) => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+
   useEffect(() => {
     if (currentUser) {
       navigate(paths.home);

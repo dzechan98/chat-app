@@ -13,15 +13,17 @@ import { Message } from "@/components/Message";
 import moment from "moment";
 import ChatRoomHeader from "@/components/ChatRoom/ChatRoomHeader";
 import { LoadingLogo } from "@/components/Loading";
+import { uid } from "uid";
 
 const ChatRoom = () => {
-  const { roomId } = useParams();
   const { currentUser } = useAuth();
+  const { roomId } = useParams();
   const [room, setRoom] = useState<Room>({} as Room);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [messageInput, setMessageInput] = useState("");
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const idCurrentUser = String(currentUser?.uid);
 
   const menuOption = [
     {
@@ -34,10 +36,6 @@ const ChatRoom = () => {
     },
   ];
 
-  if (!currentUser) {
-    return;
-  }
-
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
@@ -47,9 +45,11 @@ const ChatRoom = () => {
   const handleAddMessage = async () => {
     if (messageInput) {
       const messageItem: TypeMessage = {
-        sender: currentUser.uid,
+        id: uid(),
+        sender: idCurrentUser,
+        displayName: String(currentUser?.displayName),
         content: messageInput,
-        avatar: String(currentUser.photoURL),
+        avatar: String(currentUser?.photoURL),
         time: moment(new Date()).format(),
       };
 
@@ -69,10 +69,10 @@ const ChatRoom = () => {
   };
 
   const getUserIdWithRoom = () => {
-    const result = room.messages?.find((message) => {
-      return message.sender !== currentUser.uid;
+    const result = room.members?.find((memberId) => {
+      return memberId !== idCurrentUser;
     });
-    return result?.sender;
+    return result;
   };
 
   const callback = (result: Room) => {
@@ -121,13 +121,12 @@ const ChatRoom = () => {
                 return (
                   <Message
                     key={index}
-                    message={message.content}
+                    message={message}
+                    room={room}
                     hidden={checkHidden > 0}
-                    urlAvatar={message.avatar}
                     position={
-                      message.sender !== currentUser?.uid ? "left" : "right"
+                      message.sender !== idCurrentUser ? "left" : "right"
                     }
-                    time={moment(message.time).format("HH:mm")}
                   />
                 );
               })}

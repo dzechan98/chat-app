@@ -16,7 +16,8 @@ const styleNotActive =
   "p-4 text-main-200 text-lg rounded-lg hover:bg-primary-opacity hover:text-primary";
 
 const Sidebar = () => {
-  const { signOut } = useAuth();
+  const { currentUser, signOut } = useAuth();
+
   const menuSidebar = [
     { id: 1, icon: <FaRegUser className="text-2xl" />, to: "/" },
     {
@@ -40,7 +41,6 @@ const Sidebar = () => {
       to: "/4",
     },
   ];
-
   // const menuTheme = [
   //   { id: 1, icon: <MdOutlineLightMode /> },
   //   { id: 2, icon: <MdOutlineDarkMode /> },
@@ -67,7 +67,7 @@ const Sidebar = () => {
         <span className="block p-4 text-lg cursor-pointer">
           <MdOutlineLightMode className="text-2xl" />
         </span>
-        <Avatar url="https://static.thenounproject.com/png/363640-200.png" />
+        <Avatar url={String(currentUser?.photoURL)} />
       </div>
     </div>
   );

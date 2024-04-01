@@ -55,8 +55,11 @@ h6 {
   font-weight: inherit;
 }
 
+p {
+  text-align: justify;
+}
+
 button {
-  border: none;
   outline: none;
 }
 

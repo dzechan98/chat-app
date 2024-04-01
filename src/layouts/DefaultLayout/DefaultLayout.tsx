@@ -11,15 +11,15 @@ const DefaultLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (!currentUser) {
-    return <Navigate to={paths.signin} />;
-  }
-
   useEffect(() => {
     if (currentUser) {
       navigate(location.pathname);
     }
   }, [currentUser]);
+
+  if (!currentUser) {
+    return <Navigate to={paths.signin} />;
+  }
 
   return (
     <div className="w-full flex">

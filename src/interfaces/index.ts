@@ -34,10 +34,14 @@ export interface InputProps {
 }
 
 export interface TypeMessage {
+  id: string;
   sender: string;
+  displayName: string;
   content: string;
   avatar: string;
   time: string;
+  hardDelete?: boolean;
+  softDelete?: boolean;
 }
 
 export interface Room {

@@ -50,21 +50,22 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
           </div>
           <div className="center gap-5 cursor-pointer">
             {menuAction.map((action) => (
-              <span key={action.id} className="block p-4 text-xl text-main-200">
+              <span key={action.id} className="block p-2 text-xl text-main-200">
                 {action.icon}
               </span>
             ))}
             <Popover
+              position="right"
               render={
-                <div>
+                <p className="p-2">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
                   facilis aspernatur, dignissimos quasi facere voluptate
                   perspiciatis magnam quos, quaerat pariatur dolorem iure autem
                   ipsam amet fugit! Illum modi accusantium velit.
-                </div>
+                </p>
               }
             >
-              <span className="block p-4 text-xl text-main-200">
+              <span className="block p-2 text-xl text-main-200">
                 <IoIosMore />
               </span>
             </Popover>

@@ -1,16 +1,42 @@
+import { Size } from "@/interfaces";
+import { cva } from "class-variance-authority";
 import React, { useEffect, useRef, useState } from "react";
 
 interface PopoverProps {
+  position?: "left" | "right";
+  size?: Size;
   render: React.ReactNode;
   children: React.ReactNode;
 }
 
-const Popover: React.FC<PopoverProps> = ({ render, children }) => {
+const popover = cva(
+  "absolute z-10 bg-light top-[calc(100%+2px)] rounded-lg shadow",
+  {
+    variants: {
+      position: {
+        left: "left-[calc(100%+5px)]",
+        right: "right-[calc(100%+5px)]",
+      },
+      size: {
+        small: "w-[200px]",
+        medium: "w-[280px]",
+        large: "w-[360px]",
+      },
+    },
+  }
+);
+
+const Popover: React.FC<PopoverProps> = ({
+  position = "left",
+  size = Size.small,
+  render,
+  children,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
   const togglePopover = (): void => {
-    setIsOpen(!isOpen);
+    setIsOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const handleClickOutside = (event: MouseEvent): void => {
@@ -29,12 +55,14 @@ const Popover: React.FC<PopoverProps> = ({ render, children }) => {
     };
   }, []);
 
+  console.log(isOpen);
+
   return (
-    <div className="relative inline-block" ref={popoverRef}>
+    <div className="relative" ref={popoverRef}>
       <div onClick={togglePopover}>{children}</div>
       {isOpen && (
-        <div className="absolute z-10 right-0 top-10 w-48 p-2 mt-2 bg-light rounded shadow-lg">
-          {render}
+        <div className={popover({ position, size })}>
+          <div onClick={togglePopover}>{render}</div>
         </div>
       )}
     </div>
