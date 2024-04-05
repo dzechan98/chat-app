@@ -55,8 +55,6 @@ const Popover: React.FC<PopoverProps> = ({
     };
   }, []);
 
-  console.log(isOpen);
-
   return (
     <div className="relative" ref={popoverRef}>
       <div onClick={togglePopover}>{children}</div>

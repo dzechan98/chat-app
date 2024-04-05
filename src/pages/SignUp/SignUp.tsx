@@ -53,6 +53,7 @@ const SignUp = () => {
         const dataUser: User = {
           userId: res.user.uid,
           displayName,
+          email: res.user.email,
           photoURL: defaultUserImage,
           active: true,
           keyword: generateKeywords(displayName),

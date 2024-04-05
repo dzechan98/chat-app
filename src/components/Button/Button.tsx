@@ -15,7 +15,7 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const button = cva("center transition-all font-medium hover:opacity-90", {
+const button = cva("center transition-all font-medium", {
   variants: {
     intent: {
       primary: "bg-[#7269ef] text-white",
@@ -26,7 +26,7 @@ const button = cva("center transition-all font-medium hover:opacity-90", {
       secondary: "text-secondary",
     },
     size: {
-      small: "py-2 px-4 text-md",
+      small: "py-1 px-2 text-md",
       medium: "py-2.5 px-5 text-lg",
       large: "py-4 px-8 text-lg",
     },

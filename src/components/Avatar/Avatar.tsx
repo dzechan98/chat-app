@@ -16,7 +16,7 @@ const img = cva("rounded-full", {
     size: {
       small: "size-8",
       medium: "size-10",
-      large: "size-12",
+      large: "size-20",
     },
   },
 });

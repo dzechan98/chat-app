@@ -7,20 +7,27 @@ import { FiUsers } from "react-icons/fi";
 import { CiSearch } from "react-icons/ci";
 import { IoIosMore } from "react-icons/io";
 import { getUserById } from "@/apis";
-import { User } from "@/interfaces";
+import { Room, User } from "@/interfaces";
+import MenuRoomAction from "@/components/ChatRoom/MenuRoomAction";
+import { InfoUser } from "@/components/InfoUser";
+import { useDisclosure } from "@/hooks";
 
 interface ChatRoomHeaderProps {
+  room: Room;
   userId: string;
   loading: boolean;
   setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
+  room,
   userId,
   loading,
   setCount,
 }) => {
+  const infoUserDisclosure = useDisclosure();
   const [infoUser, setInfoUser] = useState<User>({});
+
   const menuAction = [
     { id: 1, icon: <CiSearch /> },
     { id: 2, icon: <FiUsers /> },
@@ -57,12 +64,11 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
             <Popover
               position="right"
               render={
-                <p className="p-2">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde
-                  facilis aspernatur, dignissimos quasi facere voluptate
-                  perspiciatis magnam quos, quaerat pariatur dolorem iure autem
-                  ipsam amet fugit! Illum modi accusantium velit.
-                </p>
+                <MenuRoomAction
+                  infoUser={infoUser}
+                  roomId={room.roomId}
+                  onOpenInfoUser={infoUserDisclosure.onOpen}
+                />
               }
             >
               <span className="block p-2 text-xl text-main-200">
@@ -70,6 +76,12 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
               </span>
             </Popover>
           </div>
+          <InfoUser
+            room={room}
+            infoUser={infoUser}
+            isOpenInfoUser={infoUserDisclosure.isOpen}
+            onCloseInfoUser={infoUserDisclosure.onClose}
+          />
         </>
       )}
       {loading && <LoadingChatRoomHeader />}

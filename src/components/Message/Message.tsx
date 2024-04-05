@@ -8,7 +8,8 @@ import moment from "moment";
 import { useDisclosure } from "@/hooks";
 import EditMessageModal from "@/components/Message/EditMessageModal";
 import MenuActionMessage from "@/components/Message/MenuActionMessage";
-import { useAuth } from "@/contexts/AuthContext";
+import ImageMessage from "@/components/Message/ImageMessage";
+import imageDefault from "@/assets/no-image.png";
 
 interface MessageProps {
   room: Room;
@@ -24,18 +25,14 @@ const messageWrapper = cva("w-full flex relative group", {
       right: "justify-end",
     },
     hidden: {
-      true: "mb-3",
+      true: "mb-1",
       false: "mb-7",
-    },
-    hiddenMessage: {
-      true: "hidden",
-      false: "block",
     },
   },
 });
 
 const messageStyle = cva(
-  "relative max-w-[400px] rounded-md p-3 bottom-[100%] before:absolute before:bottom-0 before:border-t-transparent before:translate-y-1/2 before:border-b-transparent before:border-[10px]",
+  "relative max-w-[400px] rounded-md p-2 bottom-[100%]",
   {
     variants: {
       position: {
@@ -43,18 +40,21 @@ const messageStyle = cva(
         right:
           "bg-light-400 text-main-100 right-12  before:right-0 before:border-l-transparent before:border-r-light-400",
       },
-      hardDelete: {
+      hidden: {
+        true: "",
+        false:
+          "before:absolute before:bottom-0 before:border-t-transparent before:translate-y-1/2 before:border-b-transparent before:border-[10px]",
+      },
+      isDelete: {
         true: "!text-[#bcc0c4]",
       },
     },
   }
 );
 
-const messageText = cva("font-medium text-sm mb-2 break-words", {
-  variants: {},
-});
+const messageText = cva("font-medium text-sm break-words");
 
-const messsageTime = cva("flex items-center gap-1 text-[12px]", {
+const messsageTime = cva("flex items-center gap-1 text-[11px]", {
   variants: {
     position: {
       left: "text-light-200 justify-end",
@@ -82,65 +82,102 @@ const Message: React.FC<MessageProps> = ({
   position = "right",
   hidden = true,
 }) => {
-  const {
-    id,
-    content,
-    avatar,
-    time,
-    softDelete,
-    sender,
-    hardDelete,
-    displayName,
-  } = message;
+  const { id, content, avatar, time, imageURL, displayName, isDelete, isEdit } =
+    message;
   const editDisclosure = useDisclosure();
-  const { currentUser } = useAuth();
-  const hiddenMessage = String(currentUser?.uid) === sender && softDelete;
 
   return (
-    <div className={messageWrapper({ position, hidden, hiddenMessage })}>
-      <div className={messageStyle({ position, hardDelete })}>
-        <p className={messageText()}>
-          {hardDelete
-            ? `${displayName.split(" ")[0]} has revoked the message`
-            : content}
-        </p>
-        {!hardDelete && (
-          <div className={messsageTime({ position })}>
-            <IoMdTime />
-            <span>{moment(time).format("HH:mm")}</span>
+    <div
+      className={`relative flex flex-col ${
+        position === "left" ? "items-start" : "items-end"
+      }`}
+    >
+      {imageURL && (
+        <>
+          <div className={messaegAvatar({ hidden })}>
+            <Avatar url={avatar} />
           </div>
-        )}
-        {position === "right" && !hardDelete && (
-          <div className={moreIcon()}>
-            <Popover
-              size={Size.medium}
-              render={
-                <MenuActionMessage
-                  room={room}
-                  messageId={id}
-                  onOpen={editDisclosure.onOpen}
-                />
-              }
-              position={position}
-            >
-              <span>
-                <IoMdMore />
-              </span>
-            </Popover>
+          <ImageMessage
+            url={!isDelete ? imageURL : imageDefault}
+            className={`relative group ${
+              position === "left" ? "left-12" : "right-12"
+            } ${hidden ? "mb-1" : ""}`}
+          >
+            {position === "right" && !isDelete && (
+              <div className={moreIcon()}>
+                <Popover
+                  size={Size.medium}
+                  render={
+                    <MenuActionMessage
+                      room={room}
+                      messageId={id}
+                      hiddenActionEdit
+                      onOpen={editDisclosure.onOpen}
+                    />
+                  }
+                  position={position}
+                >
+                  <span>
+                    <IoMdMore />
+                  </span>
+                </Popover>
+              </div>
+            )}
+          </ImageMessage>
+        </>
+      )}
+      {!imageURL && (
+        <>
+          <div className={messageWrapper({ position, hidden })}>
+            <div className={messageStyle({ position, hidden, isDelete })}>
+              <p className={messageText()}>
+                {isDelete
+                  ? `${displayName.split(" ")[0]} has revoked the message`
+                  : content}
+              </p>
+              {!isDelete && (
+                <div className={messsageTime({ position })}>
+                  <IoMdTime />
+                  <span>
+                    {moment(time).format("lll")} {isEdit ? "(Edited)" : ""}
+                  </span>
+                </div>
+              )}
+              {position === "right" && !isDelete && (
+                <div className={moreIcon()}>
+                  <Popover
+                    size={Size.medium}
+                    render={
+                      <MenuActionMessage
+                        room={room}
+                        messageId={id}
+                        onOpen={editDisclosure.onOpen}
+                      />
+                    }
+                    position={position}
+                  >
+                    <span>
+                      <IoMdMore />
+                    </span>
+                  </Popover>
+                </div>
+              )}
+            </div>
+            <div className={messaegAvatar({ hidden })}>
+              <Avatar url={avatar} />
+            </div>
           </div>
-        )}
-      </div>
-      <div className={messaegAvatar({ hidden })}>
-        <Avatar url={avatar} />
-      </div>
-      {editDisclosure.isOpen && (
-        <div className="absolute top-[calc(100%+30px)]">
-          <EditMessageModal
-            onCloseModal={editDisclosure.onClose}
-            room={room}
-            idMessage={id}
-          />
-        </div>
+          {editDisclosure.isOpen && (
+            <div className="relative top-[calc(100%+30px)] mb-4 right-12">
+              <EditMessageModal
+                onCloseModal={editDisclosure.onClose}
+                message={content}
+                room={room}
+                idMessage={id}
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

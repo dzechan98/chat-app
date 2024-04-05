@@ -25,6 +25,7 @@ const SignInMethod = () => {
         const dataUser: User = {
           userId: user.uid,
           displayName: user.displayName,
+          email: user.email,
           photoURL: user.photoURL,
           active: true,
           keyword: generateKeywords(user.displayName as string),

@@ -12,8 +12,9 @@ const useDisclosure = () => {
   };
 
   const toggleOpen = () => {
-    setIsOpen(!open);
+    setIsOpen(!isOpen);
   };
+
   return {
     isOpen,
     onOpen,

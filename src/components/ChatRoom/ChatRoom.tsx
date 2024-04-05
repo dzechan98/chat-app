@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { CiFaceSmile } from "react-icons/ci";
 import { MdAddLink } from "react-icons/md";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import { Button } from "@/components/Button";
@@ -7,13 +6,16 @@ import { useParams } from "react-router-dom";
 import { Banner } from "@/components/Banner";
 import { useEffect, useRef, useState } from "react";
 import { TypeMessage, Room } from "@/interfaces";
-import { getRoomById, updateRoom } from "@/apis";
+import { getRoomById, updateRoom, uploadImageWithFirebase } from "@/apis";
 import { useAuth } from "@/contexts/AuthContext";
 import { Message } from "@/components/Message";
 import moment from "moment";
 import ChatRoomHeader from "@/components/ChatRoom/ChatRoomHeader";
 import { LoadingLogo } from "@/components/Loading";
 import { uid } from "uid";
+import { isImageFile } from "@/utils/isImageFile";
+import Swal from "sweetalert2";
+import Image from "@/components/ChatRoom/Image";
 
 const ChatRoom = () => {
   const { currentUser } = useAuth();
@@ -23,18 +25,11 @@ const ChatRoom = () => {
   const [messageInput, setMessageInput] = useState("");
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const idCurrentUser = String(currentUser?.uid);
+  const [imageURL, setImageURl] = useState("");
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [isSelectImage, setIsSelectImage] = useState(false);
 
-  const menuOption = [
-    {
-      id: 1,
-      icon: <CiFaceSmile />,
-    },
-    {
-      id: 2,
-      icon: <MdAddLink />,
-    },
-  ];
+  const idCurrentUser = String(currentUser?.uid);
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -43,14 +38,17 @@ const ChatRoom = () => {
   };
 
   const handleAddMessage = async () => {
-    if (messageInput) {
+    if (messageInput || imageURL) {
       const messageItem: TypeMessage = {
         id: uid(),
         sender: idCurrentUser,
         displayName: String(currentUser?.displayName),
         content: messageInput,
+        imageURL,
         avatar: String(currentUser?.photoURL),
         time: moment(new Date()).format(),
+        isEdit: false,
+        isDelete: false,
       };
 
       const newRoom: Room = {
@@ -59,6 +57,8 @@ const ChatRoom = () => {
       };
       setMessageInput("");
       await updateRoom(String(roomId), newRoom);
+      setIsSelectImage(false);
+      setImageURl("");
     }
   };
 
@@ -73,6 +73,34 @@ const ChatRoom = () => {
       return memberId !== idCurrentUser;
     });
     return result;
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+
+    if (files && files.length > 0) {
+      if (isImageFile(files[0].name)) {
+        setIsSelectImage(true);
+        setLoadingImage(true);
+        const res = await uploadImageWithFirebase(files[0]);
+        setLoadingImage(false);
+        setImageURl(res);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please select the file as an image!",
+        });
+      }
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImageURl("");
+    setIsSelectImage(false);
+    setLoadingImage(false);
   };
 
   const callback = (result: Room) => {
@@ -104,6 +132,7 @@ const ChatRoom = () => {
       {roomId && (
         <>
           <ChatRoomHeader
+            room={room}
             userId={String(getUserIdWithRoom())}
             loading={loading}
             setCount={setCount}
@@ -132,26 +161,37 @@ const ChatRoom = () => {
               })}
             {loading && <LoadingLogo />}
           </div>
-          <div className="w-full h-[90px] p-6 flex items-center justify-between gap-6 border-t border-light-200">
-            <div className="w-full flex items-center gap-4 bg-light-400 rounded-md p-3 my-6">
-              <input
-                type="text"
-                placeholder="Enter messages..."
-                className="w-full bg-transparent outline-none"
-                value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
+          <div className="w-full h-[90px] p-4 flex items-center justify-between gap-6 border-t border-light-200">
+            <div className="w-full flex items-center gap-4 bg-light-400 rounded-md h-14 px-3 my-6">
+              {!isSelectImage && (
+                <input
+                  type="text"
+                  placeholder="Enter messages..."
+                  className="w-full bg-transparent outline-none"
+                  value={messageInput}
+                  onChange={(e) => setMessageInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              )}
+              {isSelectImage && (
+                <>
+                  {loadingImage ? (
+                    <Image onRemoveImage={handleRemoveImage} />
+                  ) : (
+                    <Image url={imageURL} onRemoveImage={handleRemoveImage} />
+                  )}
+                </>
+              )}
             </div>
-            {menuOption.map((option) => (
-              <span
-                key={option.id}
-                className="text-primary text-2xl cursor-pointer"
-              >
-                {option.icon}
-              </span>
-            ))}
-            <Button onClick={handleAddMessage}>
+            <span className="relative text-primary text-2xl">
+              <input
+                type="file"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                onChange={handleFileChange}
+              />
+              <MdAddLink />
+            </span>
+            <Button onClick={handleAddMessage} disabled={loadingImage}>
               <RiSendPlane2Fill />
             </Button>
           </div>

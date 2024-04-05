@@ -12,8 +12,8 @@ const loadingSpinner = cva(
   {
     variants: {
       size: {
-        small: "size-6",
-        medium: "size-8",
+        small: "size-4",
+        medium: "size-6",
         large: "size-10",
       },
       color: {
@@ -25,7 +25,7 @@ const loadingSpinner = cva(
 );
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = Size.small,
+  size = Size.medium,
   color = "normal",
 }) => {
   return <div className={loadingSpinner({ size, color })}></div>;

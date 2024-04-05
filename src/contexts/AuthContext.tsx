@@ -3,6 +3,7 @@ import { auth, SignOutUser } from "@/configs/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { getDataFromLocalStorage, saveDataToLocalStorage } from "@/utils";
 import { updateUser } from "@/apis";
+import moment from "moment";
 
 type UserContextType = {
   currentUser: User | null;
@@ -36,7 +37,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     saveDataToLocalStorage("user", currentUser);
     if (currentUser) {
-      updateUser(currentUser.uid, { active: true });
+      updateUser(currentUser.uid, {
+        active: true,
+        time: moment(new Date()).format(),
+      });
     }
   }, [currentUser]);
 

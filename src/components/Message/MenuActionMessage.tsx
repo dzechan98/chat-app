@@ -2,23 +2,22 @@ import { updateRoom } from "@/apis";
 import { Room } from "@/interfaces";
 import React from "react";
 import { MdEdit, MdDelete } from "react-icons/md";
-import { RiDeleteBackFill } from "react-icons/ri";
 import Swal from "sweetalert2";
 
 interface MenuActionMessageProps {
   messageId: string;
   room: Room;
+  hiddenActionEdit?: boolean;
   onOpen: () => void;
 }
 
 const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
   messageId,
+  hiddenActionEdit = false,
   room,
   onOpen,
 }) => {
-  const handleDeleteMessage = async (type: "recall" | "delete") => {
-    const checkRecall = type === "recall";
-
+  const handleDeleteMessage = async () => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -26,24 +25,15 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: checkRecall ? "Yes, recall it!" : "Yes, delete it!",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
       const newListMessage = room.messages.map((message) => {
-        if (checkRecall) {
-          if (message.id === messageId) {
-            return {
-              ...message,
-              hardDelete: true,
-            };
-          }
-          return message;
-        }
         if (message.id === messageId) {
           return {
             ...message,
-            softDelete: true,
+            isDelete: true,
           };
         }
         return message;
@@ -53,10 +43,8 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
         messages: newListMessage,
       } as Room);
       await Swal.fire({
-        title: checkRecall ? "Recall!" : "Deleted!",
-        text: checkRecall
-          ? "Your message has been recall."
-          : "Your message has been deleted.",
+        title: "Deleted!",
+        text: "Your message has been deleted.",
         icon: "success",
       });
     }
@@ -68,18 +56,14 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
       icon: <MdEdit />,
       title: "Edit messsage",
       onClick: onOpen,
+      hidden: hiddenActionEdit,
     },
     {
       id: 2,
       icon: <MdDelete />,
-      title: "Removal is on your side",
-      onClick: () => handleDeleteMessage("delete"),
-    },
-    {
-      id: 3,
-      icon: <RiDeleteBackFill />,
-      title: "Recall with everyone",
-      onClick: () => handleDeleteMessage("recall"),
+      title: "Remove this message",
+      onClick: handleDeleteMessage,
+      hidden: false,
     },
   ];
 
@@ -89,7 +73,9 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
         {menu.map((item) => (
           <li
             key={item.id}
-            className="cursor-pointer flex items-center gap-2 px-2 py-1 hover:bg-light-400"
+            className={`cursor-pointer flex items-center gap-2 px-2 py-1 hover:bg-light-400 ${
+              item.hidden ? "hidden" : "block"
+            }`}
             onClick={item.onClick}
           >
             {item.icon}

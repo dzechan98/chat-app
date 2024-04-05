@@ -12,9 +12,11 @@ export enum TypeInput {
 export interface User {
   userId?: string;
   displayName?: string | null;
+  email?: string | null;
   photoURL?: string | null;
   active?: boolean;
   keyword?: string[];
+  time?: string | null;
 }
 
 export interface FormData {
@@ -40,8 +42,9 @@ export interface TypeMessage {
   content: string;
   avatar: string;
   time: string;
-  hardDelete?: boolean;
-  softDelete?: boolean;
+  imageURL?: string;
+  isDelete?: boolean;
+  isEdit?: boolean;
 }
 
 export interface Room {
