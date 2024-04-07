@@ -16,6 +16,7 @@ import { uid } from "uid";
 import { isImageFile } from "@/utils/isImageFile";
 import Swal from "sweetalert2";
 import Image from "@/components/ChatRoom/Image";
+import StartChat from "@/components/ChatRoom/StartChat";
 
 const ChatRoom = () => {
   const { currentUser } = useAuth();
@@ -23,13 +24,20 @@ const ChatRoom = () => {
   const [room, setRoom] = useState<Room>({} as Room);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [messageInput, setMessageInput] = useState("");
-  const [count, setCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loadingHeader, setLoadingHeader] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState(true);
   const [imageURL, setImageURl] = useState("");
   const [loadingImage, setLoadingImage] = useState(false);
   const [isSelectImage, setIsSelectImage] = useState(false);
 
   const idCurrentUser = String(currentUser?.uid);
+  const listImage = room?.messages
+    ?.filter((message) => message.imageURL && !message.isDelete)
+    .map((message) => ({
+      source: message.imageURL,
+    }));
+  const checkListMessage =
+    room?.messages?.filter((message) => !message.isDelete).length > 0;
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -106,7 +114,7 @@ const ChatRoom = () => {
   const callback = (result: Room) => {
     if (Object.keys(result).length > 0) {
       setRoom(result);
-      setCount((prev) => prev + 1);
+      setLoadingMessage(false);
     }
   };
 
@@ -120,12 +128,6 @@ const ChatRoom = () => {
     scrollToBottom();
   }, [room]);
 
-  useEffect(() => {
-    if (count === 2) {
-      setLoading(false);
-    }
-  }, [count]);
-
   return (
     <div className="w-full h-screen flex flex-col shadow">
       {!roomId && <Banner />}
@@ -134,14 +136,17 @@ const ChatRoom = () => {
           <ChatRoomHeader
             room={room}
             userId={String(getUserIdWithRoom())}
-            loading={loading}
-            setCount={setCount}
+            loadingMessage={loadingMessage}
+            loadingHeader={loadingHeader}
+            setLoadingHeader={setLoadingHeader}
           />
           <div
             className="w-full overflow-y-scroll h-[calc(100%-180px)] max-h-[calc(100%-180px)] p-6 "
             ref={messagesEndRef}
           >
-            {!loading &&
+            {!loadingHeader &&
+              !loadingMessage &&
+              checkListMessage &&
               room?.messages?.map((message, index) => {
                 let checkHidden = 0;
                 if (room.messages[index + 1]?.sender == message.sender) {
@@ -151,6 +156,7 @@ const ChatRoom = () => {
                   <Message
                     key={index}
                     message={message}
+                    listImage={listImage}
                     room={room}
                     hidden={checkHidden > 0}
                     position={
@@ -159,7 +165,13 @@ const ChatRoom = () => {
                   />
                 );
               })}
-            {loading && <LoadingLogo />}
+            {!loadingHeader && !loadingMessage && !checkListMessage && (
+              <StartChat
+                url={String(currentUser?.photoURL)}
+                name={String(currentUser?.displayName)}
+              />
+            )}
+            {(loadingHeader || loadingMessage) && <LoadingLogo />}
           </div>
           <div className="w-full h-[90px] p-4 flex items-center justify-between gap-6 border-t border-light-200">
             <div className="w-full flex items-center gap-4 bg-light-400 rounded-md h-14 px-3 my-6">

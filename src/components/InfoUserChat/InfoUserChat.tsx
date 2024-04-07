@@ -8,15 +8,16 @@ import { IoIosClose } from "react-icons/io";
 import { FaRegUser } from "react-icons/fa";
 import { MdAddLink } from "react-icons/md";
 import moment from "moment";
+import ListImageChat from "./ListImageChat";
 
-interface InfoUserProps {
+interface InfoUserChatProps {
   room: Room;
   infoUser: User;
   isOpenInfoUser: boolean;
   onCloseInfoUser: () => void;
 }
 
-const InfoUser: React.FC<InfoUserProps> = ({
+const InfoUserChat: React.FC<InfoUserChatProps> = ({
   room,
   infoUser,
   isOpenInfoUser,
@@ -41,13 +42,9 @@ const InfoUser: React.FC<InfoUserProps> = ({
 
   const menuAccordion = [
     {
+      title: "About",
+      icon: <FaRegUser />,
       children: (
-        <div className="flex items-center gap-2 font-semibold ">
-          <FaRegUser />
-          <span>About</span>
-        </div>
-      ),
-      render: (
         <div className="px-4 py-2">
           {info.map((item, index) => (
             <div key={index} className="font-medium">
@@ -59,27 +56,9 @@ const InfoUser: React.FC<InfoUserProps> = ({
       ),
     },
     {
-      children: (
-        <div className="flex items-center gap-2 font-semibold ">
-          <MdAddLink />
-          <span>Attached Files</span>
-        </div>
-      ),
-      render: (
-        <div className="px-4 py-2 grid grid-cols-3 gap-2">
-          {listImage.length > 0 &&
-            listImage.map((image, index) => (
-              <div key={index} className="w-full">
-                <img
-                  src={image.source}
-                  alt=""
-                  className="w-full h-20 object-cover"
-                />
-              </div>
-            ))}
-          {listImage.length === 0 && <Title>No files</Title>}
-        </div>
-      ),
+      title: "Attached Files",
+      icon: <MdAddLink />,
+      children: <ListImageChat listImage={listImage} />,
     },
   ];
 
@@ -123,7 +102,7 @@ const InfoUser: React.FC<InfoUserProps> = ({
       </div>
       <div className="max-h-[calc(100%-290px)] overflow-y-auto flex flex-col gap-2 px-4 my-5">
         {menuAccordion.map((accordion, index) => (
-          <Accordion key={index} render={accordion.render}>
+          <Accordion key={index} title={accordion.title} icon={accordion.icon}>
             {accordion.children}
           </Accordion>
         ))}
@@ -138,4 +117,4 @@ const InfoUser: React.FC<InfoUserProps> = ({
   );
 };
 
-export default InfoUser;
+export default InfoUserChat;

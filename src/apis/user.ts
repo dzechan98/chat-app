@@ -80,3 +80,18 @@ export const getUserById = (userId: string, callback: (user: User) => void) => {
     }
   });
 };
+
+export const getAllUsers = (
+  userId: string,
+  callback: (uses: User[]) => void
+) => {
+  const q = query(collection(db, "users"), where("userId", "!=", userId));
+  return onSnapshot(q, (querySnapshot) => {
+    if (!querySnapshot.empty) {
+      const user = querySnapshot.docs.map((doc) => doc.data());
+      callback(user);
+    } else {
+      callback([] as User[]);
+    }
+  });
+};

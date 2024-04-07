@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { cva } from "class-variance-authority";
 import { IoMdTime, IoMdMore } from "react-icons/io";
 import { Avatar } from "@/components/Avatar";
 import { Popover } from "@/components/Popover";
-import { Room, Size, TypeMessage } from "@/interfaces";
+import { ListImage, Room, Size, TypeMessage } from "@/interfaces";
 import moment from "moment";
 import { useDisclosure } from "@/hooks";
 import EditMessageModal from "@/components/Message/EditMessageModal";
 import MenuActionMessage from "@/components/Message/MenuActionMessage";
 import ImageMessage from "@/components/Message/ImageMessage";
 import imageDefault from "@/assets/no-image.png";
+import SliderImage from "@/components/SliderImage/SliderImage";
 
 interface MessageProps {
   room: Room;
+  listImage: ListImage;
   message: TypeMessage;
   position?: "right" | "left";
   hidden?: boolean;
@@ -78,6 +80,7 @@ const moreIcon = cva(
 
 const Message: React.FC<MessageProps> = ({
   room,
+  listImage,
   message,
   position = "right",
   hidden = true,
@@ -85,6 +88,16 @@ const Message: React.FC<MessageProps> = ({
   const { id, content, avatar, time, imageURL, displayName, isDelete, isEdit } =
     message;
   const editDisclosure = useDisclosure();
+  const sliderImageDisclosure = useDisclosure();
+  const [indexSelected, setIndexSelected] = useState(-1);
+
+  const handleOpenModalSliderImage = () => {
+    if (!isDelete) {
+      const index = listImage.findIndex((image) => image.source === imageURL);
+      sliderImageDisclosure.onOpen();
+      setIndexSelected(index);
+    }
+  };
 
   return (
     <div
@@ -101,7 +114,8 @@ const Message: React.FC<MessageProps> = ({
             url={!isDelete ? imageURL : imageDefault}
             className={`relative group ${
               position === "left" ? "left-12" : "right-12"
-            } ${hidden ? "mb-1" : ""}`}
+            } ${hidden ? "mb-1" : ""} ${isDelete ? "" : "cursor-pointer"}`}
+            onClick={handleOpenModalSliderImage}
           >
             {position === "right" && !isDelete && (
               <div className={moreIcon()}>
@@ -178,6 +192,13 @@ const Message: React.FC<MessageProps> = ({
             </div>
           )}
         </>
+      )}
+      {sliderImageDisclosure.isOpen && (
+        <SliderImage
+          listImage={listImage}
+          index={indexSelected}
+          onCloseSliderImage={sliderImageDisclosure.onClose}
+        />
       )}
     </div>
   );

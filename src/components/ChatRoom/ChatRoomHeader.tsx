@@ -3,40 +3,34 @@ import { Avatar } from "@/components/Avatar";
 import { DotStatus } from "@/components/DotStatus";
 import { Popover } from "@/components/Popover";
 import { Title } from "@/components/Title";
-import { FiUsers } from "react-icons/fi";
-import { CiSearch } from "react-icons/ci";
 import { IoIosMore } from "react-icons/io";
 import { getUserById } from "@/apis";
 import { Room, User } from "@/interfaces";
 import MenuRoomAction from "@/components/ChatRoom/MenuRoomAction";
-import { InfoUser } from "@/components/InfoUser";
 import { useDisclosure } from "@/hooks";
+import { InfoUserChat } from "@/components/InfoUserChat";
 
 interface ChatRoomHeaderProps {
   room: Room;
   userId: string;
-  loading: boolean;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
+  loadingMessage: boolean;
+  loadingHeader: boolean;
+  setLoadingHeader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
   room,
   userId,
-  loading,
-  setCount,
+  loadingMessage,
+  loadingHeader,
+  setLoadingHeader,
 }) => {
   const infoUserDisclosure = useDisclosure();
   const [infoUser, setInfoUser] = useState<User>({});
-
-  const menuAction = [
-    { id: 1, icon: <CiSearch /> },
-    { id: 2, icon: <FiUsers /> },
-  ];
-
   const callback = (user: User) => {
     if (Object.keys(user).length > 0) {
       setInfoUser(user);
-      setCount((prev) => prev + 1);
+      setLoadingHeader(false);
     }
   };
 
@@ -48,7 +42,7 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
 
   return (
     <div className="w-full h-[90px] p-6 flex items-center justify-between border-b border-light-200">
-      {!loading && (
+      {!loadingHeader && !loadingMessage && (
         <>
           <div className="center gap-2">
             <Avatar url={String(infoUser.photoURL)} />
@@ -56,11 +50,6 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
             <DotStatus active={infoUser.active} />
           </div>
           <div className="center gap-5 cursor-pointer">
-            {menuAction.map((action) => (
-              <span key={action.id} className="block p-2 text-xl text-main-200">
-                {action.icon}
-              </span>
-            ))}
             <Popover
               position="right"
               render={
@@ -76,7 +65,7 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
               </span>
             </Popover>
           </div>
-          <InfoUser
+          <InfoUserChat
             room={room}
             infoUser={infoUser}
             isOpenInfoUser={infoUserDisclosure.isOpen}
@@ -84,7 +73,7 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
           />
         </>
       )}
-      {loading && <LoadingChatRoomHeader />}
+      {(loadingHeader || loadingMessage) && <LoadingChatRoomHeader />}
     </div>
   );
 };

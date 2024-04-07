@@ -1,6 +1,25 @@
+import { getAllRooms } from "@/apis";
 import { Avatar } from "@/components/Avatar";
+import { useAuth } from "@/contexts/AuthContext";
+import { Room } from "@/interfaces";
+import { useEffect, useState } from "react";
 
 const ListUserChats = () => {
+  const { currentUser } = useAuth();
+  const [listRooms, setListRooms] = useState<Room[]>([]);
+
+  const callback = (results: Room[]) => {
+    const rooms = results.filter((room) => room.messages.length > 0);
+    setListRooms(rooms);
+  };
+
+  console.log(listRooms);
+  useEffect(() => {
+    const unsubcribe = getAllRooms(String(currentUser?.uid), callback);
+
+    return unsubcribe;
+  }, []);
+
   const listUses = [
     {
       id: 1,

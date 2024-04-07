@@ -2,71 +2,50 @@ import { Avatar } from "@/components/Avatar";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Navigation } from "swiper/modules";
+import { useEffect, useState } from "react";
+import { Room, User } from "@/interfaces";
+import { createAndGetRoom, getAllUsers } from "@/apis";
+import { useAuth } from "@/contexts/AuthContext";
+import { uid } from "uid";
+import { paths } from "@/constants";
+import { useNavigate } from "react-router-dom";
 
 const ListUsers = () => {
-  const listUser = [
-    {
-      id: 1,
-      name: "Melloney",
-      active: true,
-      url: "http://dummyimage.com/182x100.png/ff4444/ffffff",
-    },
-    {
-      id: 2,
-      name: "Claire",
-      active: false,
-      url: "http://dummyimage.com/217x100.png/ff4444/ffffff",
-    },
-    {
-      id: 3,
-      name: "Etienne",
-      active: false,
-      url: "http://dummyimage.com/113x100.png/ff4444/ffffff",
-    },
-    {
-      id: 4,
-      name: "Erie",
-      active: true,
-      url: "http://dummyimage.com/101x100.png/5fa2dd/ffffff",
-    },
-    {
-      id: 5,
-      name: "Norean",
-      active: true,
-      url: "http://dummyimage.com/170x100.png/5fa2dd/ffffff",
-    },
-    {
-      id: 6,
-      name: "Conrado",
-      active: true,
-      url: "http://dummyimage.com/190x100.png/cc0000/ffffff",
-    },
-    {
-      id: 7,
-      name: "Deane",
-      active: true,
-      url: "http://dummyimage.com/147x100.png/ff4444/ffffff",
-    },
-    {
-      id: 8,
-      name: "Nefen",
-      active: false,
-      url: "http://dummyimage.com/226x100.png/dddddd/000000",
-    },
-    {
-      id: 9,
-      name: "Nell",
-      active: true,
-      url: "http://dummyimage.com/144x100.png/5fa2dd/ffffff",
-    },
-    {
-      id: 10,
-      name: "Hilary",
-      active: true,
-      url: "http://dummyimage.com/183x100.png/ff4444/ffffff",
-    },
-  ];
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const [listUsers, setListUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  const handleShowName = (name: string) => {
+    if (name.length > 9) {
+      return `${name.slice(0, 8)}...`;
+    }
+    return name;
+  };
+
+  const handleNavigateRoomChat = async (user: User) => {
+    if (currentUser && user) {
+      const currentRoom: Room = {
+        roomId: uid(),
+        members: [String(user.userId), currentUser.uid],
+        messages: [],
+      };
+      const room = await createAndGetRoom(currentRoom);
+      navigate(`${paths.chat}/${room.roomId}`);
+    }
+  };
+
+  useEffect(() => {
+    const unsubcribe = getAllUsers(
+      String(currentUser?.uid),
+      (users: User[]) => {
+        setListUsers(users);
+        setLoading(false);
+      }
+    );
+
+    return unsubcribe;
+  }, []);
   return (
     <Swiper
       slidesPerView={4}
@@ -75,20 +54,50 @@ const ListUsers = () => {
       modules={[Navigation]}
       className="w-full"
     >
-      {listUser.map((user) => (
-        <SwiperSlide key={user.id}>
-          <div className="w-full h-[120px] flex items-center">
-            <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
-              <h2 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-main-100 font-medium">
-                {user.name.split(" ")[0]}
-              </h2>
-              <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <Avatar url={user.url} iconActive active />
+      {loading &&
+        [1, 2, 3, 4].map((_, index) => (
+          <SwiperSlide key={index}>
+            <div className="animate-pulse w-full h-[120px] flex items-center">
+              <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
+                <span className="block absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-gray-700 h-2.5 w-[80%] rounded-full"></span>
+                <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <svg
+                    className="w-10 h-10 text-gray-700"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
-        </SwiperSlide>
-      ))}
+          </SwiperSlide>
+        ))}
+      {!loading &&
+        listUsers.length > 0 &&
+        listUsers.map((user) => (
+          <SwiperSlide key={user.userId}>
+            <div
+              className="w-full h-[120px] flex items-center"
+              onClick={() => handleNavigateRoomChat(user)}
+            >
+              <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
+                <h2 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-main-100 font-medium">
+                  {handleShowName(String(user.displayName?.split(" ")[0]))}
+                </h2>
+                <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <Avatar
+                    url={String(user.photoURL)}
+                    iconActive
+                    active={user.active}
+                  />
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
     </Swiper>
   );
 };

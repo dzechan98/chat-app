@@ -137,6 +137,24 @@ export const deleteRoom = async (roomId: string) => {
   }
 };
 
+export const getAllRooms = (
+  userId: string,
+  callback: (rooms: Room[]) => void
+) => {
+  const q = query(
+    collection(db, "rooms"),
+    where("members", "array-contains", userId)
+  );
+  return onSnapshot(q, (querySnapshot) => {
+    if (!querySnapshot.empty) {
+      const rooms = querySnapshot.docs.map((doc) => doc.data() as Room);
+      callback(rooms);
+    } else {
+      callback([] as Room[]);
+    }
+  });
+};
+
 export const uploadImageWithFirebase = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const storage = getStorage();

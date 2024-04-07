@@ -18,6 +18,7 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
   roomId,
   onOpenInfoUser,
 }) => {
+  console.log(infoUser);
   const navigate = useNavigate();
 
   const handleDeleteRoom = async () => {

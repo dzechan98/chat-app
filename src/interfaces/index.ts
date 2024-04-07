@@ -52,3 +52,5 @@ export interface Room {
   members: string[];
   messages: TypeMessage[];
 }
+
+export type ListImage = { source?: string }[];

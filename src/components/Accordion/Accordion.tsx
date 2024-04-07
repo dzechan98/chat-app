@@ -2,11 +2,12 @@ import { useDisclosure } from "@/hooks";
 import React from "react";
 
 interface AccordionProps {
-  render: React.ReactNode;
+  title: string;
+  icon: React.ReactNode;
   children: React.ReactNode;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ children, render }) => {
+const Accordion: React.FC<AccordionProps> = ({ title, icon, children }) => {
   const showDisclosure = useDisclosure();
 
   return (
@@ -15,7 +16,10 @@ const Accordion: React.FC<AccordionProps> = ({ children, render }) => {
         className="flex justify-between items-center text-left cursor-pointer px-4 py-2"
         onClick={showDisclosure.toggleOpen}
       >
-        {children}
+        <div className="flex items-center gap-2 font-semibold ">
+          {icon}
+          <span>{title}</span>
+        </div>
         <svg
           className={`w-4 h-4 transition-transform ${
             showDisclosure.isOpen ? "transform rotate-180" : ""
@@ -33,7 +37,7 @@ const Accordion: React.FC<AccordionProps> = ({ children, render }) => {
         </svg>
       </div>
       {showDisclosure.isOpen && (
-        <div className="border-t border-light-200">{render}</div>
+        <div className="border-t border-light-200">{children}</div>
       )}
     </div>
   );

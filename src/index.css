@@ -78,5 +78,5 @@ button {
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 20px !important;
-  color: #7269ef;
+  color: #fff;
 }
