@@ -5,18 +5,23 @@ import { Button } from "@/components/Button";
 import { useParams } from "react-router-dom";
 import { Banner } from "@/components/Banner";
 import { useEffect, useRef, useState } from "react";
-import { TypeMessage, Room } from "@/interfaces";
-import { getRoomById, updateRoom, uploadImageWithFirebase } from "@/apis";
+import { TypeMessage, Room, User } from "@/interfaces";
+import {
+  getRoomById,
+  getUserById,
+  updateRoom,
+  uploadImageWithFirebase,
+} from "@/apis";
 import { useAuth } from "@/contexts/AuthContext";
 import { Message } from "@/components/Message";
 import moment from "moment";
 import ChatRoomHeader from "@/components/ChatRoom/ChatRoomHeader";
 import { LoadingLogo } from "@/components/Loading";
 import { uid } from "uid";
-import { isImageFile } from "@/utils/isImageFile";
 import Swal from "sweetalert2";
 import Image from "@/components/ChatRoom/Image";
 import StartChat from "@/components/ChatRoom/StartChat";
+import { isImageFile } from "@/utils";
 
 const ChatRoom = () => {
   const { currentUser } = useAuth();
@@ -29,8 +34,12 @@ const ChatRoom = () => {
   const [imageURL, setImageURl] = useState("");
   const [loadingImage, setLoadingImage] = useState(false);
   const [isSelectImage, setIsSelectImage] = useState(false);
+  const [infoUser, setInfoUser] = useState<User>({});
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const idCurrentUser = String(currentUser?.uid);
+  const userId = room.members?.find((memberId) => memberId !== idCurrentUser);
+
   const listImage = room?.messages
     ?.filter((message) => message.imageURL && !message.isDelete)
     .map((message) => ({
@@ -76,13 +85,6 @@ const ChatRoom = () => {
     }
   };
 
-  const getUserIdWithRoom = () => {
-    const result = room.members?.find((memberId) => {
-      return memberId !== idCurrentUser;
-    });
-    return result;
-  };
-
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -111,22 +113,37 @@ const ChatRoom = () => {
     setLoadingImage(false);
   };
 
-  const callback = (result: Room) => {
+  const callbackMessage = (result: Room) => {
     if (Object.keys(result).length > 0) {
       setRoom(result);
       setLoadingMessage(false);
     }
   };
 
-  useEffect(() => {
-    const unsubcribe = getRoomById(String(roomId), callback);
+  const callbackHeader = (user: User) => {
+    if (Object.keys(user).length > 0) {
+      setInfoUser(user);
+      setLoadingHeader(false);
+    }
+  };
 
+  useEffect(() => {
+    const unsubcribe = getUserById(String(userId), callbackHeader);
+
+    return unsubcribe;
+  }, [userId]);
+
+  useEffect(() => {
+    const unsubcribe = getRoomById(String(roomId), callbackMessage);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
     return unsubcribe;
   }, [roomId]);
 
   useEffect(() => {
     scrollToBottom();
-  }, [room]);
+  }, [room, roomId]);
 
   return (
     <div className="w-full h-screen flex flex-col shadow">
@@ -135,10 +152,9 @@ const ChatRoom = () => {
         <>
           <ChatRoomHeader
             room={room}
-            userId={String(getUserIdWithRoom())}
+            infoUser={infoUser}
             loadingMessage={loadingMessage}
             loadingHeader={loadingHeader}
-            setLoadingHeader={setLoadingHeader}
           />
           <div
             className="w-full overflow-y-scroll h-[calc(100%-180px)] max-h-[calc(100%-180px)] p-6 "
@@ -167,8 +183,8 @@ const ChatRoom = () => {
               })}
             {!loadingHeader && !loadingMessage && !checkListMessage && (
               <StartChat
-                url={String(currentUser?.photoURL)}
-                name={String(currentUser?.displayName)}
+                url={String(infoUser.photoURL)}
+                name={String(infoUser.displayName)}
               />
             )}
             {(loadingHeader || loadingMessage) && <LoadingLogo />}
@@ -177,6 +193,7 @@ const ChatRoom = () => {
             <div className="w-full flex items-center gap-4 bg-light-400 rounded-md h-14 px-3 my-6">
               {!isSelectImage && (
                 <input
+                  ref={inputRef}
                   type="text"
                   placeholder="Enter messages..."
                   className="w-full bg-transparent outline-none"

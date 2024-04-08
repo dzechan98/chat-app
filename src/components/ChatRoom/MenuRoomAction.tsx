@@ -1,6 +1,4 @@
 import { deleteRoom } from "@/apis";
-import { paths } from "@/constants";
-import { User } from "@/interfaces";
 import React from "react";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
@@ -8,17 +6,14 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 interface MenuRoomActionProps {
-  infoUser: User;
   roomId: string;
   onOpenInfoUser: () => void;
 }
 
 const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
-  infoUser,
   roomId,
   onOpenInfoUser,
 }) => {
-  console.log(infoUser);
   const navigate = useNavigate();
 
   const handleDeleteRoom = async () => {
@@ -33,13 +28,13 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
     });
 
     if (result.isConfirmed) {
-      await deleteRoom(roomId);
       await Swal.fire({
         title: "Deleted!",
         text: "This room has been deleted.",
         icon: "success",
       });
-      navigate(paths.home);
+      await deleteRoom(roomId);
+      navigate(-1);
     }
   };
 

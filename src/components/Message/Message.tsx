@@ -60,7 +60,7 @@ const messsageTime = cva("flex items-center gap-1 text-[11px]", {
   variants: {
     position: {
       left: "text-light-200 justify-end",
-      right: "text-primary justify-start",
+      right: "text-main-200 justify-start",
     },
   },
 });

@@ -38,15 +38,14 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
         }
         return message;
       });
-
-      await updateRoom(room.roomId, {
-        messages: newListMessage,
-      } as Room);
       await Swal.fire({
         title: "Deleted!",
         text: "Your message has been deleted.",
         icon: "success",
       });
+      await updateRoom(room.roomId, {
+        messages: newListMessage,
+      } as Room);
     }
   };
 

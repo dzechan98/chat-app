@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Avatar } from "@/components/Avatar";
 import { DotStatus } from "@/components/DotStatus";
 import { Popover } from "@/components/Popover";
 import { Title } from "@/components/Title";
 import { IoIosMore } from "react-icons/io";
-import { getUserById } from "@/apis";
 import { Room, User } from "@/interfaces";
 import MenuRoomAction from "@/components/ChatRoom/MenuRoomAction";
 import { useDisclosure } from "@/hooks";
@@ -12,33 +11,18 @@ import { InfoUserChat } from "@/components/InfoUserChat";
 
 interface ChatRoomHeaderProps {
   room: Room;
-  userId: string;
+  infoUser: User;
   loadingMessage: boolean;
   loadingHeader: boolean;
-  setLoadingHeader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
   room,
-  userId,
+  infoUser,
   loadingMessage,
   loadingHeader,
-  setLoadingHeader,
 }) => {
   const infoUserDisclosure = useDisclosure();
-  const [infoUser, setInfoUser] = useState<User>({});
-  const callback = (user: User) => {
-    if (Object.keys(user).length > 0) {
-      setInfoUser(user);
-      setLoadingHeader(false);
-    }
-  };
-
-  useEffect(() => {
-    const unsubcribe = getUserById(userId, callback);
-
-    return unsubcribe;
-  }, [userId]);
 
   return (
     <div className="w-full h-[90px] p-6 flex items-center justify-between border-b border-light-200">
@@ -54,7 +38,6 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
               position="right"
               render={
                 <MenuRoomAction
-                  infoUser={infoUser}
                   roomId={room.roomId}
                   onOpenInfoUser={infoUserDisclosure.onOpen}
                 />

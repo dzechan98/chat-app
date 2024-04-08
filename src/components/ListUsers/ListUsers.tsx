@@ -1,6 +1,5 @@
 import { Avatar } from "@/components/Avatar";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
 import { Room, User } from "@/interfaces";
@@ -9,19 +8,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { uid } from "uid";
 import { paths } from "@/constants";
 import { useNavigate } from "react-router-dom";
+import { showTitleSplit } from "@/utils";
 
 const ListUsers = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [listUsers, setListUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const handleShowName = (name: string) => {
-    if (name.length > 9) {
-      return `${name.slice(0, 8)}...`;
-    }
-    return name;
-  };
 
   const handleNavigateRoomChat = async (user: User) => {
     if (currentUser && user) {
@@ -85,7 +78,7 @@ const ListUsers = () => {
             >
               <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
                 <h2 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-main-100 font-medium">
-                  {handleShowName(String(user.displayName?.split(" ")[0]))}
+                  {showTitleSplit(String(user.displayName?.split(" ")[0]), 9)}
                 </h2>
                 <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <Avatar

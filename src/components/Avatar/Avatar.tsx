@@ -11,7 +11,7 @@ interface AvatarProps {
   className?: string;
 }
 
-const img = cva("rounded-full", {
+const img = cva("rounded-full max-w-none", {
   variants: {
     size: {
       small: "size-8",
@@ -26,7 +26,7 @@ const Avatar: React.FC<AvatarProps> = ({
   iconActive,
   active,
   size = Size.medium,
-  className,
+  className = "",
 }) => {
   return (
     <div className={`relative cursor-pointer ${className}`}>
