@@ -16,7 +16,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ title, checked, setChecked }) => {
         type="checkbox"
         checked={checked}
         onChange={handleToggleChecked}
-        className="accent-[#7269ef]"
+        className="accent-primary"
       />
       <span
         className="text-sm font-medium cursor-pointer"

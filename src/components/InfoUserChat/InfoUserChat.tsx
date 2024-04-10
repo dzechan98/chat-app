@@ -83,7 +83,7 @@ const InfoUserChat: React.FC<InfoUserChatProps> = ({
 
   return (
     <div
-      className={`fixed z-[100] transition-all duration-500 max-w-[380px] w-[380px] bottom-0 h-screen shadow bg-light-100 ${
+      className={`fixed z-[100] transition-all duration-500 max-w-[380px] w-[380px] bottom-0 h-screen shadow bg-main-400 ${
         isOpenInfoUser ? "right-0" : "-right-[100%]"
       }`}
       ref={containerRef}
@@ -92,7 +92,7 @@ const InfoUserChat: React.FC<InfoUserChatProps> = ({
         <div className="rounded-full border border-light-200">
           <Avatar size={Size.large} url={String(infoUser.photoURL)} />
         </div>
-        <Title className="text-lg">{infoUser.displayName}</Title>
+        <Title className="text-lg text-main-100">{infoUser.displayName}</Title>
         <div className="center gap-1">
           <DotStatus active={infoUser.active} />
           <span className="text-main-200 text-sm font-medium">
@@ -108,7 +108,7 @@ const InfoUserChat: React.FC<InfoUserChatProps> = ({
         ))}
       </div>
       <div
-        className="absolute top-8 right-8 text-4xl cursor-pointer"
+        className="absolute top-8 right-8 text-4xl cursor-pointer text-main-100"
         onClick={onCloseInfoUser}
       >
         <IoIosClose />

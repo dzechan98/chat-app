@@ -43,7 +43,7 @@ const ListUserChats = () => {
   return (
     <>
       {loading &&
-        [1, 2, 3, 4, 5].map((i) => (
+        [1, 2, 3, 4, 5, 6].map((i) => (
           <div className="p-4" key={i}>
             <LoadingSkeletonUserChat />
           </div>
@@ -93,12 +93,29 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
   const userId = room?.members.find((member) => member !== currentUser?.uid);
   const lastMessage = room?.messages[room?.messages.length - 1];
   const chatActive = roomId === room.roomId;
+  const listMessageUntracked = room?.messages.filter(
+    (message) => !message.watched && message.sender === userId
+  ).length;
+  console.log(listMessageUntracked);
 
   const authorLastMessage =
     lastMessage.sender === currentUser?.uid
       ? "You"
       : lastMessage.displayName.split(" ")[0];
-  const lastMessageContent = room?.messages[room?.messages.length - 1]?.content;
+
+  const handleGetContentLastMessage = () => {
+    if (lastMessage.content) {
+      if (lastMessage.isDelete) {
+        return "deleted a message";
+      }
+      return lastMessage.content;
+    }
+
+    if (lastMessage.isDelete) {
+      return "deleted a photo";
+    }
+    return "sent a photo";
+  };
 
   const handleNavigateRoomChat = async (user: User) => {
     if (currentUser && user) {
@@ -146,8 +163,8 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
 
   return (
     <div
-      className={`relative group flex items-center gap-2 p-4 hover:bg-light-400 rounded-md cursor-pointer mb-2 ${
-        chatActive ? "bg-light-400" : ""
+      className={`relative group flex items-center gap-2 p-4 hover:bg-main-300 rounded-md cursor-pointer mb-2 ${
+        chatActive ? "bg-main-400" : ""
       }`}
       onClick={() => handleNavigateRoomChat(infoUser)}
     >
@@ -162,17 +179,29 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
             <h2 className="font-medium text-main-100">
               {infoUser.displayName}
             </h2>
-            <span className="text-sm text-main-300 text-main-200">
-              {`${authorLastMessage}: ${
-                showTitleSplit(lastMessageContent, 30) || "sent a photo"
+            <span
+              className={`text-sm ${
+                listMessageUntracked > 0
+                  ? "text-main-100 font-semibold"
+                  : "text-main-200"
               }`}
+            >
+              {`${authorLastMessage}: ${showTitleSplit(
+                handleGetContentLastMessage(),
+                30
+              )}`}
             </span>
           </div>
-          <div className="absolute top-1/2 -translate-y-1/2 right-2 text-main-200 text-sm">
+          <div className="absolute top-1/2 -translate-y-1/2 right-2 text-main-200 text-sm flex flex-col justify-between">
             <span>{formatTimeDifference(String(lastMessage.time))}</span>
+            {listMessageUntracked > 0 && (
+              <span className="block px-1 py-0.5 rounded-full bg-primary/50 text-primary text-center font-semibold">
+                {listMessageUntracked}
+              </span>
+            )}
           </div>
           <span
-            className="absolute right-5 top-1/2 -translate-y-1/2 group-hover:block p-2 rounded-full bg-light-100 hidden text-2xl text-primary"
+            className="absolute right-5 top-1/2 -translate-y-1/2 group-hover:block p-2 rounded-full bg-main-400 hidden text-2xl text-primary"
             onClick={(e) => {
               e.stopPropagation();
               handleDeleteRoom();

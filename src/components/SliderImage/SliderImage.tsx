@@ -16,7 +16,7 @@ const SliderImage: React.FC<SliderImageProps> = ({
   onCloseSliderImage,
 }) => {
   return (
-    <div className="fixed w-screen h-screen top-0 left-0 z-[100] bg-[rgba(0,0,0,0.5)]">
+    <div className="overlay fixed w-screen h-screen top-0 left-0 z-[100] bg-overlay">
       <Swiper
         navigation={true}
         modules={[Navigation]}

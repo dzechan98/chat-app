@@ -45,6 +45,7 @@ export interface TypeMessage {
   imageURL?: string;
   isDelete?: boolean;
   isEdit?: boolean;
+  watched?: boolean;
 }
 
 export interface Room {
@@ -54,3 +55,5 @@ export interface Room {
 }
 
 export type ListImage = { source?: string }[];
+
+export type Theme = "dark" | "light";

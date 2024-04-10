@@ -27,6 +27,24 @@
   }
 }
 
+.light {
+  --primary: 114, 105, 239;
+  --siderbar: 255, 255, 255;
+  --main-100: 42, 44, 51;
+  --main-200: 116, 120, 141;
+  --main-300: 230, 235, 245;
+  --main-400: 247, 247, 255;
+}
+
+.dark {
+  --primary: 107, 135, 155;
+  --sidebar: 54, 64, 74;
+  --main-100: 255, 255, 255;
+  --main-200: 167, 169, 182;
+  --main-300: 54, 64, 74;
+  --main-400: 48, 56, 65;
+}
+
 *,
 *::before,
 *::after {
@@ -78,5 +96,11 @@ button {
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 20px !important;
-  color: #fff;
+  color: #7269ef;
+}
+
+.overlay .swiper-button-next::after,
+.overlay .swiper-button-prev::after {
+  font-size: 36px !important;
+  color: #fff !important;
 }

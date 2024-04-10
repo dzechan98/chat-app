@@ -11,7 +11,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, icon, children }) => {
   const showDisclosure = useDisclosure();
 
   return (
-    <div className="w-full border border-light-200 rounded-md">
+    <div className="w-full border border-light-200 rounded-md text-main-100">
       <div
         className="flex justify-between items-center text-left cursor-pointer px-4 py-2"
         onClick={showDisclosure.toggleOpen}

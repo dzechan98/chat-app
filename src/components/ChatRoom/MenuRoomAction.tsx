@@ -52,11 +52,11 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
   ];
 
   return (
-    <ul className="py-2 rounded-lg shadow-sm">
+    <ul className="py-2 rounded-lg shadow-sm bg-main-400">
       {menu.map((item, index) => (
         <li
           key={index}
-          className="px-2 py-1 flex items-center gap-2 hover:bg-light-400"
+          className="px-2 py-1 flex items-center gap-2 text-main-100 hover:bg-main-300"
           onClick={item.onClick}
         >
           <span>{item.icon}</span>

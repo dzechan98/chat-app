@@ -40,7 +40,7 @@ const messageStyle = cva(
       position: {
         left: "bg-primary text-light left-12 before:left-0 before:border-r-transparent before:border-l-primary",
         right:
-          "bg-light-400 text-main-100 right-12  before:right-0 before:border-l-transparent before:border-r-light-400",
+          "bg-main-400 text-main-100 right-12  before:right-0 before:border-l-transparent before:border-r-main-400",
       },
       hidden: {
         true: "",

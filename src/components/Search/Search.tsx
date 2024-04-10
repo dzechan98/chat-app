@@ -39,7 +39,7 @@ const Search: React.FC<SearchProps> = ({ hiddenIcon = false, placeholder }) => {
   }, [debouncedValue]);
 
   return (
-    <div className="relative w-full bg-light-400 rounded-md p-3 my-6">
+    <div className="relative w-full bg-main-300 rounded-md p-3 my-6 text-main-100">
       <div className="flex items-center gap-4">
         {!hiddenIcon && (
           <span>
@@ -85,18 +85,16 @@ const ListSearchUsers: React.FC<ListSearchUsersProps> = ({
   return (
     <>
       {listSearchUsers.length > 0 && (
-        <div className="bg-light-400 absolute left-0 w-full py-3 px-2 rounded-b-md z-10">
+        <div className="bg-main-300 absolute left-0 w-full py-3 px-2 rounded-b-md z-10">
           {listSearchUsers.map((user) => (
             <div
               key={user.userId}
-              className="flex items-center gap-2 p-1 hover:bg-light-100 rounded-md cursor-pointer"
+              className="flex items-center gap-2 p-1 hover:bg-main-400 rounded-md cursor-pointer"
               onClick={() => handleNavigateRoomChat(user)}
             >
               <Avatar url={user.photoURL as string} size={Size.small} />
               <div className="flex flex-col">
-                <h2 className="font-medium text-main-100 text-sm">
-                  {user.displayName}
-                </h2>
+                <h2 className="font-medium text-sm">{user.displayName}</h2>
               </div>
             </div>
           ))}

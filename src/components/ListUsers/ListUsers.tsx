@@ -51,7 +51,7 @@ const ListUsers = () => {
         [1, 2, 3, 4].map((_, index) => (
           <SwiperSlide key={index}>
             <div className="animate-pulse w-full h-[120px] flex items-center">
-              <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
+              <div className="w-full relative h-14 bg-main-400 rounded-md flex-shrink-0">
                 <span className="block absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-gray-700 h-2.5 w-[80%] rounded-full"></span>
                 <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <svg
@@ -76,7 +76,7 @@ const ListUsers = () => {
               className="w-full h-[120px] flex items-center"
               onClick={() => handleNavigateRoomChat(user)}
             >
-              <div className="w-full relative h-14 bg-light-400 rounded-md flex-shrink-0">
+              <div className="w-full relative h-14 bg-main-300 rounded-md flex-shrink-0">
                 <h2 className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-main-100 font-medium">
                   {showTitleSplit(String(user.displayName?.split(" ")[0]), 9)}
                 </h2>

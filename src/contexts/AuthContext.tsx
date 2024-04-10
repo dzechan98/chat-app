@@ -14,7 +14,7 @@ type UserContextType = {
 
 const AuthContext = createContext<UserContextType>({} as UserContextType);
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(
     getDataFromLocalStorage("user")
   );
@@ -59,5 +59,3 @@ export const useAuth = (): UserContextType => {
   }
   return context;
 };
-
-export default AuthProvider;

@@ -45,8 +45,8 @@ const Banner = () => {
   ];
 
   return (
-    <div className="w-full h-screen pt-10 center flex-col">
-      <h2 className="text-2xl text-center mb-5">
+    <div className="w-full h-screen pt-10 center flex-col text-main-200">
+      <h2 className="text-2xl text-center mb-5 text-primary">
         Welcome to <strong>Via chat</strong>
       </h2>
       <p className="text-center text-sm mb-10">

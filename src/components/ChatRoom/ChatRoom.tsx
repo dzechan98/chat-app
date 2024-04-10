@@ -66,6 +66,7 @@ const ChatRoom = () => {
         time: moment(new Date()).format(),
         isEdit: false,
         isDelete: false,
+        watched: false,
       };
 
       const newRoom: Room = {
@@ -127,6 +128,21 @@ const ChatRoom = () => {
     }
   };
 
+  const handleUpdateStatusMessage = () => {
+    const newListMessages = room?.messages?.map((message) => {
+      if (message.sender !== idCurrentUser && !message.watched) {
+        return {
+          ...message,
+          watched: true,
+        };
+      }
+      return message;
+    });
+    updateRoom(String(roomId), {
+      messages: newListMessages,
+    } as Room);
+  };
+
   useEffect(() => {
     const unsubcribe = getUserById(String(userId), callbackHeader);
 
@@ -143,6 +159,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     scrollToBottom();
+    handleUpdateStatusMessage();
   }, [room, roomId]);
 
   return (
@@ -189,8 +206,8 @@ const ChatRoom = () => {
             )}
             {(loadingHeader || loadingMessage) && <LoadingLogo />}
           </div>
-          <div className="w-full h-[90px] p-4 flex items-center justify-between gap-6 border-t border-light-200">
-            <div className="w-full flex items-center gap-4 bg-light-400 rounded-md h-14 px-3 my-6">
+          <div className="w-full h-[90px] p-4 flex items-center justify-between gap-6 border-t border-light-200 text-main-100">
+            <div className="w-full flex items-center gap-4 bg-main-400 rounded-md h-14 px-3 my-6">
               {!isSelectImage && (
                 <input
                   ref={inputRef}

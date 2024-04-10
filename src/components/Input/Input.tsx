@@ -20,7 +20,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div className={inputWrap()}>
-      <div className="py-2 px-4 border border-r-0 border-light-200 bg-light-300 center rounded-s-md">
+      <div className="py-2 px-4 border border-r-0 border-light-200 center rounded-s-md">
         {icon}
       </div>
       <div className="w-full py-2 px-4 border relative rounded-e-md border-light-200">
@@ -29,7 +29,9 @@ const Input: React.FC<InputProps> = ({
           type={type}
           value={value}
           placeholder={placeholder}
-          className={`w-full outline-none ${error ? "pr-6" : ""}`}
+          className={`w-full outline-none bg-transparent ${
+            error ? "pr-6" : ""
+          }`}
           {...props}
         />
         {isPassword && (

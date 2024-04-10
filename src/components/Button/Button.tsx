@@ -18,7 +18,7 @@ interface ButtonProps {
 const button = cva("center transition-all font-medium", {
   variants: {
     intent: {
-      primary: "bg-[#7269ef] text-white",
+      primary: "bg-primary text-light",
       outline: "border border-primary text-primary",
     },
     text: {

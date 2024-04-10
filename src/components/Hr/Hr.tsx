@@ -7,8 +7,8 @@ interface HrProps {
 const Hr: React.FC<HrProps> = ({ title }) => {
   return (
     <div className="relative inline-flex items-center justify-center w-full">
-      <hr className="w-full h-px my-8 bg-gray-200 border-0" />
-      <span className="absolute px-3 font-medium text-main-200 -translate-x-1/2 bg-light left-1/2">
+      <hr className="w-full h-px my-8 bg-main-100 border-0" />
+      <span className="absolute px-3 font-medium text-main-200 -translate-x-1/2 bg-main-400 left-1/2">
         {title}
       </span>
     </div>

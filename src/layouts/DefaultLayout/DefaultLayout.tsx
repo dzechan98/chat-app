@@ -22,7 +22,7 @@ const DefaultLayout = () => {
   }
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex bg-layout">
       <Sidebar />
       <Outlet />
       <ChatRoom />

@@ -33,12 +33,12 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   }, [currentUser]);
 
   return (
-    <div className="bg-light-100 center p-10">
+    <div className="bg-main-300 center p-10">
       <div className="w-[500px] px-3 center flex-col text-main-200">
         <Logo />
         <h4 className="text-lg font-bold text-main-100 mb-2">{title}</h4>
         <p className="text-sm font-medium mb-4">{subTitle}</p>
-        <div className="w-full bg-light p-12 rounded-md text-main-100 mb-10">
+        <div className="w-full bg-main-400 p-12 rounded-md text-main-100 mb-10">
           {children}
           <Hr title="Or" />
           <SignInMethod />
