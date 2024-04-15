@@ -1,3 +1,4 @@
+import plugin from "tailwindcss/plugin";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
@@ -15,7 +16,23 @@ export default {
         "main-400": "rgba(var(--main-400))",
         "light-200": "#ccc",
       },
+      textShadow: {
+        sm: "0 1px 2px rgba(var(--primary))",
+        DEFAULT: "0 2px 4px rgba(var(--primary))",
+        lg: "0 4px 8px rgba(var(--primary))",
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          "text-shadow": (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme("textShadow") }
+      );
+    }),
+  ],
 };

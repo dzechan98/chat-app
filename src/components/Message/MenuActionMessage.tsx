@@ -69,22 +69,20 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
   ];
 
   return (
-    <>
-      <ul className="bg-main-400 rounded-lg w-full py-2">
-        {menu.map((item) => (
-          <li
-            key={item.id}
-            className={`cursor-pointer flex items-center gap-2 px-2 py-1 hover:bg-main-300 ${
-              item.hidden ? "hidden" : "block"
-            }`}
-            onClick={item.onClick}
-          >
-            {item.icon}
-            <span>{item.title}</span>
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className="bg-main-400 rounded-lg w-full py-2">
+      {menu.map((item) => (
+        <li
+          key={item.id}
+          className={`cursor-pointer flex items-center gap-2 px-2 py-1 hover:bg-main-300 ${
+            item.hidden ? "hidden" : "block"
+          }`}
+          onClick={item.onClick}
+        >
+          {item.icon}
+          <span>{item.title}</span>
+        </li>
+      ))}
+    </ul>
   );
 };
 

@@ -2,6 +2,7 @@
 import { addUser, checkUserExists } from "@/apis";
 import { FacebookIcon, GoogleIcon } from "@/components/Icon";
 import { auth } from "@/configs/firebase";
+import { paths } from "@/constants";
 import { useAuth } from "@/contexts/AuthContext";
 import { User } from "@/interfaces";
 import { generateKeywords } from "@/utils";
@@ -10,10 +11,13 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 type Provider = GoogleAuthProvider | FacebookAuthProvider;
 
 const SignInMethod = () => {
+  const navigate = useNavigate();
   const { setCurrentUser } = useAuth();
 
   const handleSignIn = (provider: Provider) => {
@@ -29,11 +33,14 @@ const SignInMethod = () => {
           photoURL: user.photoURL,
           active: true,
           keyword: generateKeywords(user.displayName as string),
+          timeStartJoin: moment(new Date()).format(),
         };
 
         if (!check) {
           await addUser(dataUser);
         }
+
+        navigate(paths.chat);
       })
       .catch((_error) => {});
   };

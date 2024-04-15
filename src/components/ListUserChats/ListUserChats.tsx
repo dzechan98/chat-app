@@ -3,13 +3,14 @@ import { createAndGetRoom, deleteRoom, getAllRooms, getUserById } from "@/apis";
 import { Avatar } from "@/components/Avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Room, User } from "@/interfaces";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { paths } from "@/constants";
 import { uid } from "uid";
 import moment from "moment";
 import { MdDeleteOutline } from "react-icons/md";
 import Swal from "sweetalert2";
 import { formatTimeDifference, showTitleSplit } from "@/utils";
+import { useRoom } from "@/contexts";
 
 interface UserChatProps {
   user?: User;
@@ -86,7 +87,7 @@ const LoadingSkeletonUserChat = () => {
 };
 
 const UserChat: React.FC<UserChatProps> = ({ room }) => {
-  const { roomId } = useParams();
+  const { roomId, setRoomId } = useRoom();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [infoUser, setInfoUser] = useState<User>({});
@@ -96,7 +97,6 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
   const listMessageUntracked = room?.messages.filter(
     (message) => !message.watched && message.sender === userId
   ).length;
-  console.log(listMessageUntracked);
 
   const authorLastMessage =
     lastMessage.sender === currentUser?.uid
@@ -125,6 +125,7 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
         messages: [],
       };
       const room = await createAndGetRoom(currentRoom);
+      setRoomId(room.roomId);
       navigate(`${paths.chat}/${room.roomId}`);
     }
   };

@@ -11,7 +11,7 @@ interface AvatarProps {
   className?: string;
 }
 
-const img = cva("rounded-full max-w-none", {
+const img = cva("rounded-full max-w-none object-cover", {
   variants: {
     size: {
       small: "size-8",

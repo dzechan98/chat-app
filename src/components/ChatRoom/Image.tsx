@@ -8,7 +8,7 @@ interface ImageProps {
 
 const Image: React.FC<ImageProps> = ({ url, onRemoveImage = () => {} }) => {
   return (
-    <div className="relative size-10 rounded-md center bg-light opacity-50">
+    <div className="relative size-10 rounded-md center bg-primary/50">
       {url && (
         <img
           src={url}

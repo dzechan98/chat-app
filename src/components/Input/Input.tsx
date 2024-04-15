@@ -3,37 +3,59 @@ import { cva } from "class-variance-authority";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import { InputProps, TypeInput } from "@/interfaces";
+import { TypeInput } from "@/interfaces";
 
 const inputWrap = cva("w-full flex items-stretch overflow-hidden");
 
+export interface InputProps {
+  name?: string;
+  type?: TypeInput;
+  value?: string;
+  placeholder: string;
+  error?: string;
+  isPassword?: boolean;
+  onTogglePassword?: () => void;
+  icon?: React.ReactNode;
+  isInput?: boolean;
+}
+
 const Input: React.FC<InputProps> = ({
-  id,
+  name,
   type = TypeInput.text,
-  value,
   error,
   icon,
-  placeholder,
   onTogglePassword,
   isPassword,
+  isInput = true,
   ...props
 }) => {
   return (
     <div className={inputWrap()}>
-      <div className="py-2 px-4 border border-r-0 border-light-200 center rounded-s-md">
-        {icon}
-      </div>
+      {icon && (
+        <div className="py-2 px-4 border border-r-0 border-light-200 center rounded-s-md">
+          {icon}
+        </div>
+      )}
       <div className="w-full py-2 px-4 border relative rounded-e-md border-light-200">
-        <input
-          id={id}
-          type={type}
-          value={value}
-          placeholder={placeholder}
-          className={`w-full outline-none bg-transparent ${
-            error ? "pr-6" : ""
-          }`}
-          {...props}
-        />
+        {isInput ? (
+          <input
+            id={name}
+            type={type}
+            className={`w-full outline-none bg-transparent ${
+              error ? "pr-6" : ""
+            }`}
+            {...props}
+          />
+        ) : (
+          <textarea
+            id={name}
+            rows={5}
+            {...props}
+            className={`w-full outline-none bg-transparent ${
+              error ? "pr-6" : ""
+            }`}
+          />
+        )}
         {isPassword && (
           <span
             className="absolute top-1/2 right-2 translate-x-[-50%] translate-y-[-50%] text-lg cursor-pointer"

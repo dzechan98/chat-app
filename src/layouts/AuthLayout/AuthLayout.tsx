@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { paths } from "@/constants";
+import React from "react";
+import { Link } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { SignInMethod } from "@/components/SignInMethod";
 import { Hr } from "@/components/Hr";
@@ -23,15 +21,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   path,
   children,
 }) => {
-  const navigate = useNavigate();
-  const { currentUser } = useAuth();
-
-  useEffect(() => {
-    if (currentUser) {
-      navigate(paths.home);
-    }
-  }, [currentUser]);
-
   return (
     <div className="bg-main-300 center p-10">
       <div className="w-[500px] px-3 center flex-col text-main-200">

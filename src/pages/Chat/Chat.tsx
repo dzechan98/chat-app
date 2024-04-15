@@ -1,10 +1,13 @@
 import { ListUserChats } from "@/components/ListUserChats";
 import { ListUsers } from "@/components/ListUsers";
 import { Search } from "@/components/Search";
+import { useTitle } from "@/hooks";
 
 const Chat = () => {
+  useTitle("Chat");
+
   return (
-    <div className="max-w-[380px] w-[380px] flex-shrink-0 h-screen pt-6 bg-main-400">
+    <div className="w-full h-full">
       <h2 className="px-6 text-main-100 text-xl font-medium">Chats</h2>
       <div className="px-6">
         <Search placeholder="Search messages or users" />

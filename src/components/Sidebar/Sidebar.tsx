@@ -8,24 +8,26 @@ import { MdOutlineLightMode } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Logo } from "@/components/Logo";
-import { Button } from "@/components/Button";
 import { Avatar } from "@/components/Avatar";
 import { useTheme } from "@/contexts";
+import { Popover } from "@/components/Popover";
+import MenuActionUser from "@/components/Sidebar/MenuActionUser";
+import { paths } from "@/constants";
 
 const styleActive = "p-4 text-primary text-lg rounded-lg bg-primary/20";
 const styleNotActive =
   "p-4 text-main-200 text-lg rounded-lg hover:bg-primary/20 hover:text-primary";
 
 const Sidebar = () => {
-  const { currentUser, signOut } = useAuth();
+  const { currentUser } = useAuth();
   const { theme, handleToggleTheme } = useTheme();
 
   const menuSidebar = [
-    { id: 1, icon: <FaRegUser className="text-2xl" />, to: "/" },
+    { id: 1, icon: <FaRegUser className="text-2xl" />, to: paths.profile },
     {
       id: 2,
       icon: <BsChatSquareDots className="text-2xl" />,
-      to: "/chat",
+      to: paths.chat,
     },
     {
       id: 3,
@@ -45,7 +47,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="py-8 w-[75px] max-w-[75px] flex items-center justify-between flex-col h-screen shadow-xl">
+    <div className="py-8 w-[75px] min-w-[75px] max-h-screen flex items-center justify-between flex-col h-screen shadow-xl">
       <Logo logoString={false} />
       <div className="center flex-col gap-2">
         {menuSidebar.map((item) => (
@@ -61,14 +63,15 @@ const Sidebar = () => {
         ))}
       </div>
       <div className="center flex-col gap-4">
-        <Button onClick={signOut}>Sign out</Button>
         <span
           className="block p-4 text-2xl cursor-pointer bg-primary/50 rounded-md text-primary"
           onClick={handleToggleTheme}
         >
           {theme === "dark" ? <MdOutlineLightMode /> : <MdOutlineDarkMode />}
         </span>
-        <Avatar url={String(currentUser?.photoURL)} />
+        <Popover position="top-right" render={<MenuActionUser />}>
+          <Avatar url={String(currentUser?.photoURL)} />
+        </Popover>
       </div>
     </div>
   );

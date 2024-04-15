@@ -2,38 +2,38 @@
 import { MdAddLink } from "react-icons/md";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import { Button } from "@/components/Button";
-import { useParams } from "react-router-dom";
 import { Banner } from "@/components/Banner";
 import { useEffect, useRef, useState } from "react";
 import { TypeMessage, Room, User } from "@/interfaces";
-import {
-  getRoomById,
-  getUserById,
-  updateRoom,
-  uploadImageWithFirebase,
-} from "@/apis";
+import { getRoomById, getUserById, updateRoom } from "@/apis";
 import { useAuth } from "@/contexts/AuthContext";
 import { Message } from "@/components/Message";
 import moment from "moment";
 import ChatRoomHeader from "@/components/ChatRoom/ChatRoomHeader";
 import { LoadingLogo } from "@/components/Loading";
 import { uid } from "uid";
-import Swal from "sweetalert2";
 import Image from "@/components/ChatRoom/Image";
 import StartChat from "@/components/ChatRoom/StartChat";
-import { isImageFile } from "@/utils";
+import { useRoom } from "@/contexts";
+import { useUploadImage } from "@/hooks";
 
 const ChatRoom = () => {
   const { currentUser } = useAuth();
-  const { roomId } = useParams();
+  const { roomId } = useRoom();
   const [room, setRoom] = useState<Room>({} as Room);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const {
+    loadingImage,
+    imageURL,
+    isSelectImage,
+    setIsSelectImage,
+    setImageURL,
+    setLoadingImage,
+    handleFileChange,
+  } = useUploadImage();
   const [messageInput, setMessageInput] = useState("");
   const [loadingHeader, setLoadingHeader] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState(true);
-  const [imageURL, setImageURl] = useState("");
-  const [loadingImage, setLoadingImage] = useState(false);
-  const [isSelectImage, setIsSelectImage] = useState(false);
   const [infoUser, setInfoUser] = useState<User>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -76,7 +76,7 @@ const ChatRoom = () => {
       setMessageInput("");
       await updateRoom(String(roomId), newRoom);
       setIsSelectImage(false);
-      setImageURl("");
+      setImageURL("");
     }
   };
 
@@ -85,31 +85,29 @@ const ChatRoom = () => {
       handleAddMessage();
     }
   };
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const files = event.target.files;
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = event.target.files;
-
-    if (files && files.length > 0) {
-      if (isImageFile(files[0].name)) {
-        setIsSelectImage(true);
-        setLoadingImage(true);
-        const res = await uploadImageWithFirebase(files[0]);
-        setLoadingImage(false);
-        setImageURl(res);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Please select the file as an image!",
-        });
-      }
-    }
-  };
+  //   if (files && files.length > 0) {
+  //     if (isImageFile(files[0].name)) {
+  //       setIsSelectImage(true);
+  //       setLoadingImage(true);
+  //       const res = await uploadImageWithFirebase(files[0]);
+  //       setLoadingImage(false);
+  //       setImageURl(res);
+  //     } else {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: "Please select the file as an image!",
+  //       });
+  //     }
+  //   }
+  // };
 
   const handleRemoveImage = () => {
-    setImageURl("");
+    setImageURL("");
     setIsSelectImage(false);
     setLoadingImage(false);
   };

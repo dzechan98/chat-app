@@ -11,13 +11,18 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Field } from "@/components/Field";
 import { Button } from "@/components/Button";
 import { AuthLayout } from "@/layouts/AuthLayout";
-import { validationSchema } from "@/pages/SignIn/SignIn";
 import { addUser } from "@/apis";
 import defaultUserImage from "@/assets/default-user.png";
 import { generateKeywords } from "@/utils";
 import { LoadingSpinner } from "@/components/Loading";
+import { useTitle } from "@/hooks";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
 const SignUp = () => {
+  useTitle("Sign Up");
+  const navigate = useNavigate();
   const {
     control,
     setError,
@@ -25,7 +30,12 @@ const SignUp = () => {
     formState: { errors, isSubmitting, isValid },
   } = useForm<FormData>({
     mode: "onBlur",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(
+      yup.object({
+        email: yup.string().required().email(),
+        password: yup.string().required().min(8).password(),
+      })
+    ),
   });
   const { setCurrentUser } = useAuth();
 
@@ -41,7 +51,11 @@ const SignUp = () => {
 
   const onSubmit = async ({ email, password }: FormData) => {
     try {
-      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        email.toLocaleLowerCase(),
+        password as string
+      );
       const displayName = email.split("@")[0];
 
       if (auth.currentUser) {
@@ -57,10 +71,12 @@ const SignUp = () => {
           photoURL: defaultUserImage,
           active: true,
           keyword: generateKeywords(displayName),
+          timeStartJoin: moment(new Date()).format(),
         };
 
         await addUser(dataUser);
         setCurrentUser(res.user);
+        navigate(paths.chat);
       }
     } catch (error) {
       const errorMessage =

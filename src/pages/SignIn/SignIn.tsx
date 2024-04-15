@@ -14,22 +14,12 @@ import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { LoadingSpinner } from "@/components/Loading";
-
-const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
-export const validationSchema = yup
-  .object({
-    email: yup
-      .string()
-      .matches(emailRegex, "Invalid email")
-      .required("Please Enter Your Username"),
-    password: yup
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Please Enter Your Password"),
-  })
-  .required();
+import { useTitle } from "@/hooks";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  useTitle("Sign Up");
+  const navigate = useNavigate();
   const {
     control,
     setError,
@@ -37,8 +27,14 @@ const SignIn = () => {
     formState: { errors, isSubmitting, isValid },
   } = useForm<FormData>({
     mode: "onBlur",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(
+      yup.object({
+        email: yup.string().required().email(),
+        password: yup.string().required().min(8).password(),
+      })
+    ),
   });
+
   const { setCurrentUser } = useAuth();
   const [checked, setChecked] = useState(false);
   const [typePassword, setTypePassword] = useState<TypeInput>(
@@ -53,8 +49,13 @@ const SignIn = () => {
 
   const onSubmit = async ({ email, password }: FormData) => {
     try {
-      const res = await signInWithEmailAndPassword(auth, email, password);
+      const res = await signInWithEmailAndPassword(
+        auth,
+        email.toLocaleLowerCase(),
+        password as string
+      );
       setCurrentUser(res.user);
+      navigate(paths.chat);
     } catch (error) {
       setError("password", {
         type: "custom",

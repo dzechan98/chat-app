@@ -37,7 +37,9 @@ const Accordion: React.FC<AccordionProps> = ({ title, icon, children }) => {
         </svg>
       </div>
       {showDisclosure.isOpen && (
-        <div className="border-t border-light-200">{children}</div>
+        <div className="border-t border-light-200 max-h-[200px] overflow-y-auto">
+          {children}
+        </div>
       )}
     </div>
   );

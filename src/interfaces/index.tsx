@@ -1,3 +1,5 @@
+import React from "react";
+
 export enum Size {
   small = "small",
   medium = "medium",
@@ -7,6 +9,7 @@ export enum Size {
 export enum TypeInput {
   text = "text",
   password = "password",
+  date = "date",
 }
 
 export interface User {
@@ -16,23 +19,17 @@ export interface User {
   photoURL?: string | null;
   active?: boolean;
   keyword?: string[];
+  address?: string;
+  description?: string;
+  phoneNumber?: string;
   time?: string | null;
+  timeStartJoin?: string | null;
+  dateOfBirth?: string | null;
 }
 
 export interface FormData {
   email: string;
-  password: string;
-}
-
-export interface InputProps {
-  id?: string;
-  type?: TypeInput;
-  value: string;
-  placeholder: string;
-  error?: string;
-  isPassword?: boolean;
-  onTogglePassword?: () => void;
-  icon?: React.ReactNode;
+  password?: string;
 }
 
 export interface TypeMessage {
@@ -57,3 +54,9 @@ export interface Room {
 export type ListImage = { source?: string }[];
 
 export type Theme = "dark" | "light";
+
+export interface MenuInfoAccordion {
+  title: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}

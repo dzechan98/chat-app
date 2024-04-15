@@ -4,7 +4,7 @@ import React from "react";
 
 interface ButtonProps {
   type?: "button" | "submit";
-  intent?: "primary" | "outline";
+  intent?: "primary" | "outline" | "text";
   text?: "primary" | "secondary";
   size?: Size;
   rounded?: Size;
@@ -15,11 +15,12 @@ interface ButtonProps {
   onClick?: () => void;
 }
 
-const button = cva("center transition-all font-medium", {
+const button = cva("relative center transition-all font-medium gap-1", {
   variants: {
     intent: {
-      primary: "bg-primary text-light",
+      primary: "bg-primary text-light border border-primary",
       outline: "border border-primary text-primary",
+      text: "text-primary",
     },
     text: {
       primary: "text-primary",
@@ -27,11 +28,11 @@ const button = cva("center transition-all font-medium", {
     },
     size: {
       small: "py-1 px-2 text-md",
-      medium: "py-2.5 px-5 text-lg",
-      large: "py-4 px-8 text-lg",
+      medium: "py-2 px-4 text-lg",
+      large: "py-4 px-8 text-xl",
     },
     disabled: {
-      true: "opacity-40 select-none hover:opacity-40",
+      true: "opacity-40 select-none hover:opacity-40 cursor-not-allowed",
     },
     loading: {
       true: "opacity-40 select-none hover:opacity-40",

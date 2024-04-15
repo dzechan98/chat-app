@@ -1,5 +1,7 @@
+import React from "react";
+
 const Home = () => {
-  return <div className="cursor-pointer"></div>;
+  return <div></div>;
 };
 
 export default Home;

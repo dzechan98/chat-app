@@ -9,9 +9,11 @@ import { uid } from "uid";
 import { paths } from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { showTitleSplit } from "@/utils";
+import { useRoom } from "@/contexts";
 
 const ListUsers = () => {
   const { currentUser } = useAuth();
+  const { setRoomId } = useRoom();
   const navigate = useNavigate();
   const [listUsers, setListUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +26,7 @@ const ListUsers = () => {
         messages: [],
       };
       const room = await createAndGetRoom(currentRoom);
+      setRoomId(room.roomId);
       navigate(`${paths.chat}/${room.roomId}`);
     }
   };

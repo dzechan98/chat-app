@@ -8,6 +8,7 @@ import { uid } from "uid";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { paths } from "@/constants";
+import { useRoom } from "@/contexts";
 
 interface SearchProps {
   hiddenIcon?: boolean;
@@ -67,6 +68,7 @@ const ListSearchUsers: React.FC<ListSearchUsersProps> = ({
   setSearchValue,
 }) => {
   const { currentUser } = useAuth();
+  const { setRoomId } = useRoom();
   const navigate = useNavigate();
 
   const handleNavigateRoomChat = async (user: User) => {
@@ -78,6 +80,7 @@ const ListSearchUsers: React.FC<ListSearchUsersProps> = ({
       };
       const room = await createAndGetRoom(currentRoom);
       setSearchValue("");
+      setRoomId(room.roomId);
       navigate(`${paths.chat}/${room.roomId}`);
     }
   };

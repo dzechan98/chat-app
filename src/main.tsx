@@ -5,7 +5,7 @@ import "./index.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { AuthProvider, ThemeProvider } from "@/contexts";
+import { AuthProvider, RoomProvider, ThemeProvider } from "@/contexts";
 import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -13,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <App />
+          <RoomProvider>
+            <App />
+          </RoomProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
