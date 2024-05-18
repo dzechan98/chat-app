@@ -29,13 +29,7 @@ const InfoUserChat: React.FC<InfoUserChatProps> = ({
     {
       title: "About",
       icon: <FaRegUser />,
-      children: (
-        <InfoUserAccordion
-          {...infoUser}
-          // displayName={infoUser.displayName as string}
-          // time={infoUser.time as string}
-        />
-      ),
+      children: <InfoUserAccordion {...infoUser} />,
     },
     {
       title: "Attached Files",

@@ -35,9 +35,9 @@ export interface FormData {
 export interface TypeMessage {
   id: string;
   sender: string;
-  displayName: string;
+  // displayName: string;
   content: string;
-  avatar: string;
+  // avatar: string;
   time: string;
   imageURL?: string;
   isDelete?: boolean;

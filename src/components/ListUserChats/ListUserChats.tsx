@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createAndGetRoom, deleteRoom, getAllRooms, getUserById } from "@/apis";
+import { createAndGetRoom, deleteRoom, getAllRooms } from "@/apis";
 import { Avatar } from "@/components/Avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Room, User } from "@/interfaces";
@@ -11,6 +11,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import Swal from "sweetalert2";
 import { formatTimeDifference, showTitleSplit } from "@/utils";
 import { useRoom } from "@/contexts";
+import { useFetchUserById } from "@/hooks";
 
 interface UserChatProps {
   user?: User;
@@ -90,8 +91,8 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
   const { roomId, setRoomId } = useRoom();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const [infoUser, setInfoUser] = useState<User>({});
   const userId = room?.members.find((member) => member !== currentUser?.uid);
+  const { infoUser } = useFetchUserById(userId);
   const lastMessage = room?.messages[room?.messages.length - 1];
   const chatActive = roomId === room.roomId;
   const listMessageUntracked = room?.messages.filter(
@@ -101,7 +102,7 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
   const authorLastMessage =
     lastMessage.sender === currentUser?.uid
       ? "You"
-      : lastMessage.displayName.split(" ")[0];
+      : infoUser.displayName?.split(" ")[0];
 
   const handleGetContentLastMessage = () => {
     if (lastMessage.content) {
@@ -151,16 +152,6 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
       navigate(-1);
     }
   };
-
-  useEffect(() => {
-    let unsubcribe;
-    if (userId) {
-      unsubcribe = getUserById(userId, (user) => {
-        setInfoUser(user);
-      });
-    }
-    return unsubcribe;
-  }, []);
 
   return (
     <div

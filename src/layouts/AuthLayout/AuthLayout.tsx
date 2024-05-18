@@ -34,7 +34,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
         </div>
         <div className="center gap-1 mb-3">
           <span>{heading}</span>
-          <Link to={path} className="text-primary">
+          <Link to={path} className="text-primaryf font-medium">
             {subHeading}
           </Link>
         </div>

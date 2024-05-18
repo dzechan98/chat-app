@@ -19,7 +19,7 @@ const Info: React.FC<InfoProps> = ({
   photoURL,
 }) => {
   return (
-    <div>
+    <>
       <div className="h-[250px] w-full center flex-col gap-3 border-light-200 border-b">
         <div className="rounded-full border border-light-200">
           <Avatar size={Size.large} url={String(photoURL)} />
@@ -39,7 +39,7 @@ const Info: React.FC<InfoProps> = ({
           </Accordion>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

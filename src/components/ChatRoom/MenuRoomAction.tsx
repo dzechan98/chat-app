@@ -1,4 +1,5 @@
 import { deleteRoom } from "@/apis";
+import { useRoom } from "@/contexts";
 import React from "react";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
@@ -14,6 +15,7 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
   roomId,
   onOpenInfoUser,
 }) => {
+  const { setRoomId } = useRoom();
   const navigate = useNavigate();
 
   const handleDeleteRoom = async () => {
@@ -34,6 +36,7 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
         icon: "success",
       });
       await deleteRoom(roomId);
+      setRoomId("");
       navigate(-1);
     }
   };

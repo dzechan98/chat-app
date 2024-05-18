@@ -56,6 +56,7 @@ const SignUp = () => {
         email.toLocaleLowerCase(),
         password as string
       );
+
       const displayName = email.split("@")[0];
 
       if (auth.currentUser) {

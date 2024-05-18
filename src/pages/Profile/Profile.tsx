@@ -12,7 +12,7 @@ const Profile = () => {
   useTitle("Profile");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { loading, infoUser } = useFetchUserById(currentUser?.uid as string);
+  const { loading, infoUser } = useFetchUserById(currentUser?.uid);
 
   const menuInfoAccordion = [
     {

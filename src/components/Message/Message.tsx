@@ -18,6 +18,7 @@ interface MessageProps {
   message: TypeMessage;
   position?: "right" | "left";
   hidden?: boolean;
+  avatarURL?: string;
 }
 
 const messageWrapper = cva("w-full flex relative group", {
@@ -84,9 +85,9 @@ const Message: React.FC<MessageProps> = ({
   message,
   position = "right",
   hidden = true,
+  avatarURL = "",
 }) => {
-  const { id, content, avatar, time, imageURL, displayName, isDelete, isEdit } =
-    message;
+  const { id, content, time, imageURL, isDelete, isEdit } = message;
   const editDisclosure = useDisclosure();
   const sliderImageDisclosure = useDisclosure();
   const [indexSelected, setIndexSelected] = useState(-1);
@@ -108,7 +109,7 @@ const Message: React.FC<MessageProps> = ({
       {imageURL && (
         <>
           <div className={messaegAvatar({ hidden })}>
-            <Avatar url={avatar} />
+            <Avatar url={avatarURL} />
           </div>
           <ImageMessage
             url={!isDelete ? imageURL : imageDefault}
@@ -145,9 +146,7 @@ const Message: React.FC<MessageProps> = ({
           <div className={messageWrapper({ position, hidden })}>
             <div className={messageStyle({ position, hidden, isDelete })}>
               <p className={messageText()}>
-                {isDelete
-                  ? `${displayName.split(" ")[0]} has revoked the message`
-                  : content}
+                {isDelete ? `kakaka has revoked the message` : content}
               </p>
               {!isDelete && (
                 <div className={messsageTime({ position })}>
@@ -178,7 +177,7 @@ const Message: React.FC<MessageProps> = ({
               )}
             </div>
             <div className={messaegAvatar({ hidden })}>
-              <Avatar url={avatar} />
+              <Avatar url={avatarURL} />
             </div>
           </div>
           {editDisclosure.isOpen && (

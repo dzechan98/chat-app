@@ -15,6 +15,9 @@ import { MdDeleteOutline } from "react-icons/md";
 import { updateProfile } from "firebase/auth";
 import { auth } from "@/configs/firebase";
 import { updateUser } from "@/apis";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { paths } from "@/constants";
 
 interface ProfileState {
   photoURL?: string;
@@ -28,7 +31,8 @@ interface ProfileState {
 
 const UpdateProfile = () => {
   const { currentUser } = useAuth();
-  const { loading, infoUser } = useFetchUserById(currentUser?.uid as string);
+  const navigate = useNavigate();
+  const { loading, infoUser } = useFetchUserById(currentUser?.uid);
   const {
     loadingImage,
     imageURL,
@@ -66,11 +70,13 @@ const UpdateProfile = () => {
     if (!auth.currentUser) {
       return;
     }
+
     await Promise.all([
       updateUser(infoUser.userId as string, { ...value }),
       updateProfile(auth.currentUser, { ...value }),
     ]);
-
+    toast.success("Update profile successfully");
+    navigate(paths.profile);
     console.log(value);
   };
 
@@ -88,6 +94,7 @@ const UpdateProfile = () => {
               <Avatar
                 url={imageURL ? imageURL : (infoUser.photoURL as string)}
                 size={Size.large}
+                overlay={isSelectImage && loadingImage}
               />
               <div className="flex flex-col gap-2">
                 <Button size={Size.small}>

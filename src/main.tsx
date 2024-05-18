@@ -7,6 +7,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { AuthProvider, RoomProvider, ThemeProvider } from "@/contexts";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <AuthProvider>
           <RoomProvider>
             <App />
+            <ToastContainer />
           </RoomProvider>
         </AuthProvider>
       </ThemeProvider>

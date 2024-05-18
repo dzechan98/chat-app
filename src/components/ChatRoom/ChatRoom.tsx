@@ -4,8 +4,8 @@ import { RiSendPlane2Fill } from "react-icons/ri";
 import { Button } from "@/components/Button";
 import { Banner } from "@/components/Banner";
 import { useEffect, useRef, useState } from "react";
-import { TypeMessage, Room, User } from "@/interfaces";
-import { getRoomById, getUserById, updateRoom } from "@/apis";
+import { TypeMessage, Room } from "@/interfaces";
+import { getRoomById, updateRoom } from "@/apis";
 import { useAuth } from "@/contexts/AuthContext";
 import { Message } from "@/components/Message";
 import moment from "moment";
@@ -15,7 +15,7 @@ import { uid } from "uid";
 import Image from "@/components/ChatRoom/Image";
 import StartChat from "@/components/ChatRoom/StartChat";
 import { useRoom } from "@/contexts";
-import { useUploadImage } from "@/hooks";
+import { useFetchUserById, useUploadImage } from "@/hooks";
 
 const ChatRoom = () => {
   const { currentUser } = useAuth();
@@ -34,19 +34,23 @@ const ChatRoom = () => {
   const [messageInput, setMessageInput] = useState("");
   const [loadingHeader, setLoadingHeader] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState(true);
-  const [infoUser, setInfoUser] = useState<User>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
   const idCurrentUser = String(currentUser?.uid);
   const userId = room.members?.find((memberId) => memberId !== idCurrentUser);
+
+  const callbackHeader = () => {
+    setLoadingHeader(false);
+  };
+
+  const { infoUser } = useFetchUserById(userId, callbackHeader);
 
   const listImage = room?.messages
     ?.filter((message) => message.imageURL && !message.isDelete)
     .map((message) => ({
       source: message.imageURL,
     }));
-  const checkListMessage =
-    room?.messages?.filter((message) => !message.isDelete).length > 0;
+  const checkListMessage = room?.messages?.length > 0;
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -59,10 +63,8 @@ const ChatRoom = () => {
       const messageItem: TypeMessage = {
         id: uid(),
         sender: idCurrentUser,
-        displayName: String(currentUser?.displayName),
         content: messageInput,
         imageURL,
-        avatar: String(currentUser?.photoURL),
         time: moment(new Date()).format(),
         isEdit: false,
         isDelete: false,
@@ -119,13 +121,6 @@ const ChatRoom = () => {
     }
   };
 
-  const callbackHeader = (user: User) => {
-    if (Object.keys(user).length > 0) {
-      setInfoUser(user);
-      setLoadingHeader(false);
-    }
-  };
-
   const handleUpdateStatusMessage = () => {
     const newListMessages = room?.messages?.map((message) => {
       if (message.sender !== idCurrentUser && !message.watched) {
@@ -140,12 +135,6 @@ const ChatRoom = () => {
       messages: newListMessages,
     } as Room);
   };
-
-  useEffect(() => {
-    const unsubcribe = getUserById(String(userId), callbackHeader);
-
-    return unsubcribe;
-  }, [userId]);
 
   useEffect(() => {
     const unsubcribe = getRoomById(String(roomId), callbackMessage);
@@ -192,6 +181,11 @@ const ChatRoom = () => {
                     hidden={checkHidden > 0}
                     position={
                       message.sender !== idCurrentUser ? "left" : "right"
+                    }
+                    avatarURL={
+                      message.sender !== idCurrentUser
+                        ? (infoUser.photoURL as string)
+                        : (currentUser?.photoURL as string)
                     }
                   />
                 );
