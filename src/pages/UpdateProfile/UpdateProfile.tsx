@@ -37,9 +37,7 @@ const UpdateProfile = () => {
     loadingImage,
     imageURL,
     isSelectImage,
-    setIsSelectImage,
     setImageURL,
-    setLoadingImage,
     handleFileChange,
   } = useUploadImage();
 
@@ -77,7 +75,6 @@ const UpdateProfile = () => {
     ]);
     toast.success("Update profile successfully");
     navigate(paths.profile);
-    console.log(value);
   };
 
   return (

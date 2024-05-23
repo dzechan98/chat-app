@@ -5,7 +5,7 @@ import { Avatar } from "@/components/Avatar";
 import { Popover } from "@/components/Popover";
 import { ListImage, Room, Size, TypeMessage } from "@/interfaces";
 import moment from "moment";
-import { useDisclosure } from "@/hooks";
+import { useDisclosure, useFetchUserById } from "@/hooks";
 import EditMessageModal from "@/components/Message/EditMessageModal";
 import MenuActionMessage from "@/components/Message/MenuActionMessage";
 import ImageMessage from "@/components/Message/ImageMessage";
@@ -18,7 +18,6 @@ interface MessageProps {
   message: TypeMessage;
   position?: "right" | "left";
   hidden?: boolean;
-  avatarURL?: string;
 }
 
 const messageWrapper = cva("w-full flex relative group", {
@@ -85,12 +84,12 @@ const Message: React.FC<MessageProps> = ({
   message,
   position = "right",
   hidden = true,
-  avatarURL = "",
 }) => {
-  const { id, content, time, imageURL, isDelete, isEdit } = message;
+  const { id, content, time, imageURL, isDelete, isEdit, sender } = message;
   const editDisclosure = useDisclosure();
   const sliderImageDisclosure = useDisclosure();
   const [indexSelected, setIndexSelected] = useState(-1);
+  const { infoUser } = useFetchUserById(sender);
 
   const handleOpenModalSliderImage = () => {
     if (!isDelete) {
@@ -109,7 +108,7 @@ const Message: React.FC<MessageProps> = ({
       {imageURL && (
         <>
           <div className={messaegAvatar({ hidden })}>
-            <Avatar url={avatarURL} />
+            <Avatar url={infoUser.photoURL as string} />
           </div>
           <ImageMessage
             url={!isDelete ? imageURL : imageDefault}
@@ -146,7 +145,11 @@ const Message: React.FC<MessageProps> = ({
           <div className={messageWrapper({ position, hidden })}>
             <div className={messageStyle({ position, hidden, isDelete })}>
               <p className={messageText()}>
-                {isDelete ? `kakaka has revoked the message` : content}
+                {isDelete
+                  ? `${
+                      infoUser.displayName?.split(" ")[0]
+                    } has revoked the message`
+                  : content}
               </p>
               {!isDelete && (
                 <div className={messsageTime({ position })}>
@@ -177,7 +180,7 @@ const Message: React.FC<MessageProps> = ({
               )}
             </div>
             <div className={messaegAvatar({ hidden })}>
-              <Avatar url={avatarURL} />
+              <Avatar url={infoUser.photoURL as string} />
             </div>
           </div>
           {editDisclosure.isOpen && (

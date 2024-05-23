@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { MdAddLink } from "react-icons/md";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import { Button } from "@/components/Button";
 import { Banner } from "@/components/Banner";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TypeMessage, Room } from "@/interfaces";
 import { getRoomById, updateRoom } from "@/apis";
 import { useAuth } from "@/contexts/AuthContext";
@@ -43,14 +44,20 @@ const ChatRoom = () => {
     setLoadingHeader(false);
   };
 
+  const listMessage = useMemo(() => {
+    return room.messages?.filter(
+      (message) => !message.isHiddenWithSender.includes(idCurrentUser)
+    );
+  }, [room]);
+
   const { infoUser } = useFetchUserById(userId, callbackHeader);
 
-  const listImage = room?.messages
+  const listImage = listMessage
     ?.filter((message) => message.imageURL && !message.isDelete)
     .map((message) => ({
       source: message.imageURL,
     }));
-  const checkListMessage = room?.messages?.length > 0;
+  const checkListMessage = listMessage?.length > 0;
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -69,6 +76,7 @@ const ChatRoom = () => {
         isEdit: false,
         isDelete: false,
         watched: false,
+        isHiddenWithSender: [],
       };
 
       const newRoom: Room = {
@@ -87,26 +95,6 @@ const ChatRoom = () => {
       handleAddMessage();
     }
   };
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   const files = event.target.files;
-
-  //   if (files && files.length > 0) {
-  //     if (isImageFile(files[0].name)) {
-  //       setIsSelectImage(true);
-  //       setLoadingImage(true);
-  //       const res = await uploadImageWithFirebase(files[0]);
-  //       setLoadingImage(false);
-  //       setImageURl(res);
-  //     } else {
-  //       Swal.fire({
-  //         icon: "error",
-  //         title: "Oops...",
-  //         text: "Please select the file as an image!",
-  //       });
-  //     }
-  //   }
-  // };
 
   const handleRemoveImage = () => {
     setImageURL("");
@@ -167,9 +155,9 @@ const ChatRoom = () => {
             {!loadingHeader &&
               !loadingMessage &&
               checkListMessage &&
-              room?.messages?.map((message, index) => {
+              listMessage?.map((message, index) => {
                 let checkHidden = 0;
-                if (room.messages[index + 1]?.sender == message.sender) {
+                if (listMessage[index + 1]?.sender == message.sender) {
                   checkHidden++;
                 }
                 return (
@@ -181,11 +169,6 @@ const ChatRoom = () => {
                     hidden={checkHidden > 0}
                     position={
                       message.sender !== idCurrentUser ? "left" : "right"
-                    }
-                    avatarURL={
-                      message.sender !== idCurrentUser
-                        ? (infoUser.photoURL as string)
-                        : (currentUser?.photoURL as string)
                     }
                   />
                 );

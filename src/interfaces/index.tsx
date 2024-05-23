@@ -35,14 +35,13 @@ export interface FormData {
 export interface TypeMessage {
   id: string;
   sender: string;
-  // displayName: string;
   content: string;
-  // avatar: string;
   time: string;
   imageURL?: string;
   isDelete?: boolean;
   isEdit?: boolean;
   watched?: boolean;
+  isHiddenWithSender: string[];
 }
 
 export interface Room {

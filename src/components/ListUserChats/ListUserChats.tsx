@@ -25,7 +25,13 @@ const ListUserChats = () => {
 
   const callback = (results: Room[]) => {
     const rooms = results
-      .filter((room) => room.messages.length > 0)
+      .filter(
+        (room) =>
+          room.messages?.filter(
+            (message) =>
+              !message.isHiddenWithSender.includes(String(currentUser?.uid))
+          ).length > 0
+      )
       .sort((a, b) => {
         return (
           moment(b.messages[b.messages.length - 1].time).valueOf() -
@@ -148,7 +154,10 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
         text: "This room has been deleted.",
         icon: "success",
       });
-      await deleteRoom(room.roomId);
+      await deleteRoom(room.roomId, currentUser?.uid as string);
+      if (chatActive) {
+        setRoomId("");
+      }
       navigate(-1);
     }
   };
@@ -156,7 +165,7 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
   return (
     <div
       className={`relative group flex items-center gap-2 p-4 hover:bg-main-300 rounded-md cursor-pointer mb-2 ${
-        chatActive ? "bg-main-400" : ""
+        chatActive ? "bg-main-300" : ""
       }`}
       onClick={() => handleNavigateRoomChat(infoUser)}
     >

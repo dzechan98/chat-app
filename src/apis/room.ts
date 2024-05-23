@@ -1,9 +1,9 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { db } from "@/configs/firebase";
-import { Room } from "@/interfaces";
+import { Room, TypeMessage } from "@/interfaces";
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDocs,
   limit,
@@ -120,7 +120,7 @@ export const updateRoom = async (roomId: string, field: Room) => {
   }
 };
 
-export const deleteRoom = async (roomId: string) => {
+export const deleteRoom = async (roomId: string, sender: string) => {
   const q = query(
     collection(db, "rooms"),
     where("roomId", "==", roomId),
@@ -128,12 +128,26 @@ export const deleteRoom = async (roomId: string) => {
   );
   const querySnapshot = await getDocs(q);
   let docId = "";
+  let room = {} as Room;
   querySnapshot.forEach((doc) => {
     docId = doc.id;
+    room = doc.data() as Room;
+  });
+
+  const newListMessages: TypeMessage[] = room?.messages?.map((message) => {
+    if (!message.isHiddenWithSender?.includes(sender)) {
+      return {
+        ...message,
+        isHiddenWithSender: [...message?.isHiddenWithSender, sender],
+      };
+    }
+    return message;
   });
 
   if (docId) {
-    await deleteDoc(doc(db, "rooms", docId));
+    await updateDoc(doc(db, "rooms", docId), {
+      messages: newListMessages,
+    });
   }
 };
 
