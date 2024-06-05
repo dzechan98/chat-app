@@ -11,7 +11,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ title, checked, setChecked }) => {
     setChecked(!checked);
   };
   return (
-    <div className="w-full flex items-center gap-2 mb-6">
+    <div className="w-full flex items-center gap-2">
       <input
         type="checkbox"
         checked={checked}

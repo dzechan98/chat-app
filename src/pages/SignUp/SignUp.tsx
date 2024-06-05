@@ -105,7 +105,7 @@ const SignUp = () => {
                 {...field}
                 title="Email"
                 icon={<MdOutlineMailOutline className="text-main-100" />}
-                placeholder="Enter your email address"
+                placeholder="Enter your email"
                 error={errors.email?.message}
               />
             );

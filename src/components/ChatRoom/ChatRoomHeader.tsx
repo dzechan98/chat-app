@@ -4,20 +4,22 @@ import { DotStatus } from "@/components/DotStatus";
 import { Popover } from "@/components/Popover";
 import { Title } from "@/components/Title";
 import { IoIosMore } from "react-icons/io";
-import { Room, User } from "@/interfaces";
+import { TypeMessage, User } from "@/interfaces";
 import MenuRoomAction from "@/components/ChatRoom/MenuRoomAction";
 import { useDisclosure } from "@/hooks";
 import { InfoUserChat } from "@/components/InfoUserChat";
 
 interface ChatRoomHeaderProps {
-  room: Room;
+  roomId: string;
+  listMessage: TypeMessage[];
   infoUser: User;
   loadingMessage: boolean;
   loadingHeader: boolean;
 }
 
 const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
-  room,
+  roomId,
+  listMessage,
   infoUser,
   loadingMessage,
   loadingHeader,
@@ -38,7 +40,7 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
               position="right"
               render={
                 <MenuRoomAction
-                  roomId={room.roomId}
+                  roomId={roomId}
                   onOpenInfoUser={infoUserDisclosure.onOpen}
                 />
               }
@@ -49,7 +51,7 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
             </Popover>
           </div>
           <InfoUserChat
-            room={room}
+            listMessage={listMessage}
             infoUser={infoUser}
             isOpenInfoUser={infoUserDisclosure.isOpen}
             onCloseInfoUser={infoUserDisclosure.onClose}

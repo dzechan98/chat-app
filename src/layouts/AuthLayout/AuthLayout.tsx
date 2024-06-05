@@ -22,23 +22,27 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="bg-main-300 center p-10">
-      <div className="w-[500px] px-3 center flex-col text-main-200">
+    <div className="w-screen min-h-screen bg-main-300 center p-2 md:p-10">
+      <div className="w-full max-w-[500px] md:px-3 center flex-col text-main-200">
         <Logo />
-        <h4 className="text-lg font-bold text-main-100 mb-2">{title}</h4>
-        <p className="text-sm font-medium mb-4">{subTitle}</p>
-        <div className="w-full bg-main-400 p-12 rounded-md text-main-100 mb-10">
+        <h4 className="hidden sm:block text-lg font-bold text-main-100 mb-2">
+          {title}
+        </h4>
+        <p className="text-sm font-medium my-4 sm:mt-0 ">{subTitle}</p>
+        <div className="w-full shadow-lg bg-main-400 p-4 md:p-12 rounded-md text-main-100 mb-5 md:mb-10">
           {children}
           <Hr title="Or" />
           <SignInMethod />
         </div>
-        <div className="center gap-1 mb-3">
+        <div className="text-sm text-center sm:text-[16px] center gap-1 mb-3">
           <span>{heading}</span>
-          <Link to={path} className="text-primaryf font-medium">
+          <Link to={path} className="text-primary font-medium">
             {subHeading}
           </Link>
         </div>
-        <p>© 2024 Chatvia. Crafted with by Themesbrand</p>
+        <p className="text-sm text-center sm:text-[16px]">
+          © 2024 Chatvia. Crafted with by Themesbrand
+        </p>
       </div>
     </div>
   );

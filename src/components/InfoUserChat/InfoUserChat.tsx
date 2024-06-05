@@ -1,4 +1,4 @@
-import { MenuInfoAccordion, Room, User } from "@/interfaces";
+import { MenuInfoAccordion, TypeMessage, User } from "@/interfaces";
 import React, { useEffect, useRef } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { MdAddLink } from "react-icons/md";
@@ -7,23 +7,24 @@ import { IoIosClose } from "react-icons/io";
 import { Info, InfoUserAccordion } from "@/components/InfoUserChat";
 
 interface InfoUserChatProps {
-  room: Room;
+  listMessage: TypeMessage[];
   infoUser: User;
   isOpenInfoUser: boolean;
   onCloseInfoUser: () => void;
 }
 
 const InfoUserChat: React.FC<InfoUserChatProps> = ({
-  room,
+  listMessage,
   infoUser,
   isOpenInfoUser,
   onCloseInfoUser,
 }) => {
-  const listImage = room.messages
-    .filter((message) => message.imageURL && !message.isDelete)
-    .map((message) => ({
-      source: message.imageURL,
-    }));
+  const listImage =
+    listMessage
+      ?.filter((message) => message.imageURL && !message.isDelete)
+      ?.map((message) => ({
+        source: message.imageURL,
+      })) ?? [];
 
   const menuAccordion: MenuInfoAccordion[] = [
     {

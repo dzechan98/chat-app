@@ -143,7 +143,8 @@ const ChatRoom = () => {
       {roomId && (
         <>
           <ChatRoomHeader
-            room={room}
+            listMessage={listMessage}
+            roomId={roomId}
             infoUser={infoUser}
             loadingMessage={loadingMessage}
             loadingHeader={loadingHeader}

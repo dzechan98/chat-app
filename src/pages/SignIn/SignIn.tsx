@@ -83,7 +83,7 @@ const SignIn = () => {
                 {...field}
                 title="Email"
                 icon={<MdOutlineMailOutline className="text-main-100" />}
-                placeholder="Enter your email address"
+                placeholder="Enter your email"
                 error={errors.email?.message}
               />
             );
@@ -106,11 +106,13 @@ const SignIn = () => {
             />
           )}
         />
-        <Checkbox
-          title="Remember me"
-          checked={checked}
-          setChecked={setChecked}
-        />
+        <div className="w-full mb-3 sm:mb-5">
+          <Checkbox
+            title="Remember me"
+            checked={checked}
+            setChecked={setChecked}
+          />
+        </div>
         <Button fullwidth type="submit" size={Size.small} disabled={!isValid}>
           {isSubmitting ? <LoadingSpinner /> : "Sign in"}
         </Button>

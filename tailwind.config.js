@@ -21,6 +21,9 @@ export default {
         DEFAULT: "0 2px 4px rgba(var(--primary))",
         lg: "0 4px 8px rgba(var(--primary))",
       },
+      screens: {
+        sm: "380px",
+      },
     },
   },
   plugins: [
