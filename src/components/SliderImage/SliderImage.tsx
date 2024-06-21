@@ -30,14 +30,14 @@ const SliderImage: React.FC<SliderImageProps> = ({
                 <img
                   src={image.source}
                   alt=""
-                  className="max-h-[70vh] object-cover max-w-[60%]"
+                  className="max-h-[70vh] object-cover max-w-[80%] lg:max-w-[60%]"
                 />
               </div>
             </SwiperSlide>
           ))}
       </Swiper>
       <div
-        className="absolute right-8 top-8 text-4xl cursor-pointer text-light"
+        className="absolute right-8 top-8 text-4xl cursor-pointer text-light z-[100]"
         onClick={onCloseSliderImage}
       >
         <IoIosClose />

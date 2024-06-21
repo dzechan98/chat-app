@@ -21,6 +21,9 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
 
   const handleDeleteRoom = async () => {
     const result = await Swal.fire({
+      customClass: {
+        container: "my-swal",
+      },
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -32,6 +35,9 @@ const MenuRoomAction: React.FC<MenuRoomActionProps> = ({
 
     if (result.isConfirmed) {
       await Swal.fire({
+        customClass: {
+          container: "my-swal",
+        },
         title: "Deleted!",
         text: "This room has been deleted.",
         icon: "success",

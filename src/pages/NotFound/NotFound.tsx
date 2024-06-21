@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { Size } from "@/interfaces";
 import { Title } from "@/components/Title";
+import { useAuth } from "@/contexts";
 
 const NotFound = () => {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
 
   return (
     <div className="bg-main-400 w-screen h-screen py-10">
@@ -31,7 +33,7 @@ const NotFound = () => {
           <Button
             size={Size.large}
             intent="outline"
-            onClick={() => navigate(paths.home)}
+            onClick={() => navigate(currentUser ? paths.chat : paths.signin)}
           >
             <span>Go to home</span>
             <span className="ml-2">

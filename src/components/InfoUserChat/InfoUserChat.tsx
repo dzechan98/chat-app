@@ -60,7 +60,7 @@ const InfoUserChat: React.FC<InfoUserChatProps> = ({
 
   return (
     <div
-      className={`fixed z-[100] transition-all duration-500 max-w-[380px] w-[380px] bottom-0 h-screen shadow bg-main-400 ${
+      className={`fixed z-[100] transition-all duration-500 w-full sm:max-w-[380px] sm:w-[380px] bottom-0 h-screen shadow bg-main-400 ${
         isOpenInfoUser ? "right-0" : "-right-[100%]"
       }`}
       ref={containerRef}

@@ -14,11 +14,11 @@ const ImageMessage: React.FC<ImageMessageProps> = ({
   children,
 }) => {
   return (
-    <div className={`max-w-[400px] rounded-md ${className}`}>
+    <div className={`max-w-full md:max-w-[400px] rounded-md ${className}`}>
       <img
         src={url}
         alt=""
-        className="w-full object-cover max-h-[300px] rounded-md"
+        className="w-full object-cover max-w-[200px] sm:max-h-[300px] rounded-md"
         onClick={onClick}
       />
       {children}

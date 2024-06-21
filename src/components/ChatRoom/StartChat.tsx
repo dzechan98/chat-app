@@ -13,7 +13,7 @@ const StartChat: React.FC<StartChatProps> = ({ url, name }) => {
     <div className="h-full w-full center flex-col gap-4">
       <Avatar url={url} size={Size.large} />
       <Title className="text-2xl text-main-100">{name}</Title>
-      <Title className="text-main-200">{`You and ${
+      <Title className="text-main-200 text-center leading-6">{`You and ${
         name.split(" ")[0]
       } don't have any messages yet`}</Title>
     </div>

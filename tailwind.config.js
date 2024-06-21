@@ -24,6 +24,9 @@ export default {
       screens: {
         sm: "380px",
       },
+      gridTemplateColumns: {
+        "auto-fit-minmax": "repeat(auto-fit, minmax(240px, 1fr))",
+      },
     },
   },
   plugins: [

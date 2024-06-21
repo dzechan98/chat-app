@@ -29,7 +29,7 @@
 
 .light {
   --primary: 114, 105, 239;
-  --siderbar: 255, 255, 255;
+  --sidebar: 255, 255, 255;
   --main-100: 42, 44, 51;
   --main-200: 116, 120, 141;
   --main-300: 230, 235, 245;
@@ -103,4 +103,8 @@ button {
 .overlay .swiper-button-prev::after {
   font-size: 36px !important;
   color: #fff !important;
+}
+
+.my-swal {
+  z-index: 10002;
 }

@@ -17,8 +17,8 @@ const img = cva("rounded-full max-w-none object-cover", {
   variants: {
     size: {
       small: "size-8",
-      medium: "size-10",
-      large: "size-20",
+      medium: "size-8 md:size-10",
+      large: "size-16 sm:size-20",
     },
   },
 });

@@ -1,8 +1,5 @@
 import { FaRegUser } from "react-icons/fa";
 import { BsChatSquareDots } from "react-icons/bs";
-import { FiUsers } from "react-icons/fi";
-import { RiUserSharedLine } from "react-icons/ri";
-import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { MdOutlineLightMode } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -13,14 +10,17 @@ import { useTheme } from "@/contexts";
 import { Popover } from "@/components/Popover";
 import MenuActionUser from "@/components/Sidebar/MenuActionUser";
 import { paths } from "@/constants";
+import { useWidth } from "@/hooks";
 
-const styleActive = "p-4 text-primary text-lg rounded-lg bg-primary/20";
+const styleActive =
+  "p-2 sm:p-4 text-primary text-sm sm:text-lg rounded-lg bg-primary/20";
 const styleNotActive =
-  "p-4 text-main-200 text-lg rounded-lg hover:bg-primary/20 hover:text-primary";
+  "p-2 sm:p-4 text-main-200 text-sm sm:text-lg rounded-lg hover:bg-primary/20 hover:text-primary";
 
 const Sidebar = () => {
   const { currentUser } = useAuth();
   const { theme, handleToggleTheme } = useTheme();
+  const { width } = useWidth();
 
   const menuSidebar = [
     { id: 1, icon: <FaRegUser className="text-2xl" />, to: paths.profile },
@@ -29,27 +29,12 @@ const Sidebar = () => {
       icon: <BsChatSquareDots className="text-2xl" />,
       to: paths.chat,
     },
-    {
-      id: 3,
-      icon: <FiUsers className="text-2xl" />,
-      to: "/2",
-    },
-    {
-      id: 4,
-      icon: <RiUserSharedLine className="text-2xl" />,
-      to: "/3",
-    },
-    {
-      id: 5,
-      icon: <IoSettingsOutline className="text-2xl" />,
-      to: "/4",
-    },
   ];
 
   return (
-    <div className="py-8 w-[75px] min-w-[75px] max-h-screen flex items-center justify-between flex-col h-screen shadow-xl">
+    <div className="fixed z-[10000] w-full px-6 lg:z-0 lg:px-0 h-20 bottom-0 bg-layout lg:py-8 lg:relative lg:w-[75px] lg:min-w-[75px] lg:max-h-screen flex items-center justify-between lg:flex-col lg:h-screen shadow-2xl">
       <Logo logoString={false} />
-      <div className="center flex-col gap-2">
+      <div className="center lg:flex-col gap-2">
         {menuSidebar.map((item) => (
           <NavLink
             key={item.id}
@@ -62,14 +47,17 @@ const Sidebar = () => {
           </NavLink>
         ))}
       </div>
-      <div className="center flex-col gap-4">
+      <div className="center lg:flex-col gap-4">
         <span
-          className="block p-4 text-2xl cursor-pointer bg-primary/50 rounded-md text-primary"
+          className="block fixed top-4 right-6 lg:inset-0 lg:relative p-2 md:p-4 text-2xl cursor-pointer bg-primary/50 rounded-md text-primary"
           onClick={handleToggleTheme}
         >
           {theme === "dark" ? <MdOutlineLightMode /> : <MdOutlineDarkMode />}
         </span>
-        <Popover position="top-right" render={<MenuActionUser />}>
+        <Popover
+          position={width > 1023 ? "bottom-right" : "bottom-left"}
+          render={<MenuActionUser />}
+        >
           <Avatar url={String(currentUser?.photoURL)} />
         </Popover>
       </div>

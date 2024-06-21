@@ -6,8 +6,10 @@ import { Title } from "@/components/Title";
 import { IoIosMore } from "react-icons/io";
 import { TypeMessage, User } from "@/interfaces";
 import MenuRoomAction from "@/components/ChatRoom/MenuRoomAction";
-import { useDisclosure } from "@/hooks";
+import { useDisclosure, useWidth } from "@/hooks";
 import { InfoUserChat } from "@/components/InfoUserChat";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { useModalRoomChat } from "@/contexts";
 
 interface ChatRoomHeaderProps {
   roomId: string;
@@ -25,12 +27,26 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
   loadingHeader,
 }) => {
   const infoUserDisclosure = useDisclosure();
+  const { width } = useWidth();
+  const { setIsOpenModal } = useModalRoomChat();
+
+  const handleCloseModalRoomChat = () => {
+    setIsOpenModal(false);
+  };
 
   return (
-    <div className="w-full h-[90px] p-6 flex items-center justify-between border-b border-light-200">
+    <div className="w-full h-16 md:h-[90px] p-2 md:p-6 flex items-center justify-between border-b border-light-200">
       {!loadingHeader && !loadingMessage && (
         <>
-          <div className="center gap-2">
+          <div className="center gap-1">
+            {width < 1024 && (
+              <span
+                className="cursor-pointer"
+                onClick={handleCloseModalRoomChat}
+              >
+                <MdKeyboardArrowLeft fontSize={25} />
+              </span>
+            )}
             <Avatar url={String(infoUser.photoURL)} />
             <Title>{infoUser.displayName}</Title>
             <DotStatus active={infoUser.active} />

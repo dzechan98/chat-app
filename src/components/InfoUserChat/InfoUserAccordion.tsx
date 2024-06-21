@@ -59,7 +59,7 @@ const InfoUserAccordion: React.FC<InfoUserAccordionProps> = ({
         .map((item, index) => (
           <div key={index} className="font-medium mb-2">
             <span className="text-main-200">{item.field}</span>
-            <p>{item.value}</p>
+            <p className="break-words">{item.value}</p>
           </div>
         ))}
     </div>

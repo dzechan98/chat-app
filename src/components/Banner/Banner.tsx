@@ -45,7 +45,7 @@ const Banner = () => {
   ];
 
   return (
-    <div className="w-full h-screen pt-10 center flex-col text-main-200">
+    <div className="w-full h-screen pt-10 px-4 center flex-col text-main-200">
       <h2 className="text-2xl text-center mb-5 text-primary">
         Welcome to <strong>Via chat</strong>
       </h2>
@@ -64,7 +64,7 @@ const Banner = () => {
           delay: 2000,
           disableOnInteraction: false,
         }}
-        className="w-[800px]"
+        className="w-[300px] md:w-[500px] xl:w-[800px]"
       >
         {listBanner.map((banner) => (
           <SwiperSlide key={banner.id}>
@@ -72,8 +72,7 @@ const Banner = () => {
               <img
                 src={banner.img}
                 alt="banner"
-                width={380}
-                className="mb-10"
+                className="w-[300px] lg:w-[380px]mb-10"
               />
               <Title className="text-primary mb-4 text-lg">
                 {banner.title}

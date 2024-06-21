@@ -3,19 +3,31 @@ import { cva } from "class-variance-authority";
 import React, { useEffect, useRef, useState } from "react";
 
 interface PopoverProps {
-  position?: "left" | "right" | "top-right" | "top-left";
+  position?:
+    | "left"
+    | "right"
+    | "top-right"
+    | "top-left"
+    | "bottom-right"
+    | "bottom-left"
+    | "center";
   size?: Size;
   render: React.ReactNode;
   children: React.ReactNode;
 }
 
-const popover = cva("absolute z-10 bg-light rounded-lg shadow", {
+const popover = cva("absolute z-[101] bg-light rounded-lg shadow", {
   variants: {
     position: {
       left: "left-[calc(100%+5px)] top-[calc(100%+2px)]",
       right: "right-[calc(100%+5px)] top-[calc(100%+2px)]",
       "top-right": "left-[calc(100%+5px)] bottom-[calc(100%+2px)]",
       "top-left": "right-[calc(100%+5px)] bottom-[calc(100%+2px)]",
+      "bottom-right":
+        "left-[calc(100%+5px)] top-[calc(100%+2px)] translate-y-[-100%]",
+      "bottom-left":
+        "right-[calc(100%+5px)] top-[calc(100%+2px)] translate-y-[-100%]",
+      center: "left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2",
     },
     size: {
       small: "w-[200px]",

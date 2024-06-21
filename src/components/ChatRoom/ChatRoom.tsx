@@ -5,7 +5,7 @@ import { RiSendPlane2Fill } from "react-icons/ri";
 import { Button } from "@/components/Button";
 import { Banner } from "@/components/Banner";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TypeMessage, Room } from "@/interfaces";
+import { TypeMessage, Room, Size } from "@/interfaces";
 import { getRoomById, updateRoom } from "@/apis";
 import { useAuth } from "@/contexts/AuthContext";
 import { Message } from "@/components/Message";
@@ -16,7 +16,7 @@ import { uid } from "uid";
 import Image from "@/components/ChatRoom/Image";
 import StartChat from "@/components/ChatRoom/StartChat";
 import { useRoom } from "@/contexts";
-import { useFetchUserById, useUploadImage } from "@/hooks";
+import { useFetchUserById, useUploadImage, useWidth } from "@/hooks";
 
 const ChatRoom = () => {
   const { currentUser } = useAuth();
@@ -36,6 +36,7 @@ const ChatRoom = () => {
   const [loadingHeader, setLoadingHeader] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { width } = useWidth();
 
   const idCurrentUser = String(currentUser?.uid);
   const userId = room.members?.find((memberId) => memberId !== idCurrentUser);
@@ -150,7 +151,7 @@ const ChatRoom = () => {
             loadingHeader={loadingHeader}
           />
           <div
-            className="w-full overflow-y-scroll h-[calc(100%-180px)] max-h-[calc(100%-180px)] p-6 "
+            className="w-full overflow-y-scroll h-[calc(100%-128px)] max-h-[calc(100%-128px)] md:h-[calc(100%-180px)] md:max-h-[calc(100%-180px)] p-2 md:p-6 "
             ref={messagesEndRef}
           >
             {!loadingHeader &&
@@ -182,8 +183,8 @@ const ChatRoom = () => {
             )}
             {(loadingHeader || loadingMessage) && <LoadingLogo />}
           </div>
-          <div className="w-full h-[90px] p-4 flex items-center justify-between gap-6 border-t border-light-200 text-main-100">
-            <div className="w-full flex items-center gap-4 bg-main-400 rounded-md h-14 px-3 my-6">
+          <div className="w-full h-16 md:h-[90px] p-2 md:p-4 flex items-center justify-between gap-3 md:gap-6 border-t border-light-200 text-main-100">
+            <div className="w-full flex items-center gap-2 sm:gap-4 bg-main-400 rounded-md h-10 md:h-14 px-2 my-2 md:my-6">
               {!isSelectImage && (
                 <input
                   ref={inputRef}
@@ -213,7 +214,11 @@ const ChatRoom = () => {
               />
               <MdAddLink />
             </span>
-            <Button onClick={handleAddMessage} disabled={loadingImage}>
+            <Button
+              onClick={handleAddMessage}
+              disabled={loadingImage}
+              size={width >= 380 ? Size.medium : Size.small}
+            >
               <RiSendPlane2Fill />
             </Button>
           </div>

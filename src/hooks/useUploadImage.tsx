@@ -23,6 +23,9 @@ const useUploadImage = () => {
           .catch((error) => console.log(error));
       } else {
         Swal.fire({
+          customClass: {
+            container: "my-swal",
+          },
           icon: "error",
           title: "Oops...",
           text: "Please select the file as an image!",

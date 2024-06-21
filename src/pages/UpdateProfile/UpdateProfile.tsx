@@ -5,7 +5,7 @@ import { Field } from "@/components/Field";
 import { LoadingLogo, LoadingSpinner } from "@/components/Loading";
 import { Title } from "@/components/Title";
 import { useAuth } from "@/contexts";
-import { useFetchUserById, useUploadImage } from "@/hooks";
+import { useFetchUserById, useTitle, useUploadImage } from "@/hooks";
 import { Size, TypeInput } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +30,7 @@ interface ProfileState {
 }
 
 const UpdateProfile = () => {
+  useTitle("Update Profile");
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const { loading, infoUser } = useFetchUserById(currentUser?.uid);
@@ -81,10 +82,10 @@ const UpdateProfile = () => {
     <div className="w-full h-full text-main-100">
       {loading && <LoadingLogo />}
       {!loading && (
-        <div className="h-full px-6">
+        <div className="h-full px-4 md:px-6">
           <Title className="text-xl text-main-100 mb-6">Update profile</Title>
           <form
-            className="max-h-[calc(100%-52px)] overflow-y-auto pb-6"
+            className="max-h-[calc(100%-52px)] overflow-y-auto pb-20"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="flex gap-2 mb-5">
@@ -118,98 +119,101 @@ const UpdateProfile = () => {
                 </Button>
               </div>
             </div>
-            <Controller
-              name="displayName"
-              control={control}
-              defaultValue={infoUser.displayName ?? ""}
-              render={({ field }) => {
-                return (
-                  <Field
-                    {...field}
-                    title="Name"
-                    placeholder="Enter your name"
-                    error={errors.displayName?.message}
-                  />
-                );
-              }}
-            />
-            <Controller
-              name="dateOfBirth"
-              control={control}
-              defaultValue={infoUser.dateOfBirth ?? ""}
-              render={({ field }) => {
-                return (
-                  <Field
-                    {...field}
-                    title="Date of birth"
-                    placeholder="Select date"
-                    type={TypeInput.date}
-                    error={errors.dateOfBirth?.message}
-                  />
-                );
-              }}
-            />
-            <Controller
-              name="email"
-              control={control}
-              defaultValue={infoUser.email ?? ""}
-              render={({ field }) => {
-                return (
-                  <Field
-                    {...field}
-                    title="Email"
-                    placeholder="Enter your email address"
-                    error={errors.email?.message}
-                  />
-                );
-              }}
-            />
-            <Controller
-              name="description"
-              control={control}
-              defaultValue={infoUser.description ?? ""}
-              render={({ field }) => {
-                return (
-                  <Field
-                    {...field}
-                    isInput={false}
-                    title="Description"
-                    placeholder="Enter your description"
-                    error={errors.description?.message}
-                  />
-                );
-              }}
-            />
-            <Controller
-              name="address"
-              control={control}
-              defaultValue={infoUser.address ?? ""}
-              render={({ field }) => {
-                return (
-                  <Field
-                    {...field}
-                    title="Email"
-                    placeholder="Enter your address"
-                    error={errors.address?.message}
-                  />
-                );
-              }}
-            />
-            <Controller
-              name="phoneNumber"
-              control={control}
-              defaultValue={infoUser.phoneNumber ?? ""}
-              render={({ field }) => {
-                return (
-                  <Field
-                    {...field}
-                    title="Phone number"
-                    placeholder="Enter your phone number"
-                    error={errors.phoneNumber?.message}
-                  />
-                );
-              }}
-            />
+            <div className="grid grid-cols-auto-fit-minmax gap-x-2">
+              <Controller
+                name="displayName"
+                control={control}
+                defaultValue={infoUser.displayName ?? ""}
+                render={({ field }) => {
+                  return (
+                    <Field
+                      {...field}
+                      title="Name"
+                      placeholder="Enter your name"
+                      error={errors.displayName?.message}
+                    />
+                  );
+                }}
+              />
+              <Controller
+                name="dateOfBirth"
+                control={control}
+                defaultValue={infoUser.dateOfBirth ?? ""}
+                render={({ field }) => {
+                  return (
+                    <Field
+                      {...field}
+                      title="Date of birth"
+                      placeholder="Select date"
+                      type={TypeInput.date}
+                      error={errors.dateOfBirth?.message}
+                    />
+                  );
+                }}
+              />
+              <Controller
+                name="email"
+                control={control}
+                defaultValue={infoUser.email ?? ""}
+                render={({ field }) => {
+                  return (
+                    <Field
+                      {...field}
+                      title="Email"
+                      placeholder="Enter your email address"
+                      error={errors.email?.message}
+                    />
+                  );
+                }}
+              />
+              <Controller
+                name="phoneNumber"
+                control={control}
+                defaultValue={infoUser.phoneNumber ?? ""}
+                render={({ field }) => {
+                  return (
+                    <Field
+                      {...field}
+                      title="Phone number"
+                      placeholder="Enter your phone number"
+                      error={errors.phoneNumber?.message}
+                    />
+                  );
+                }}
+              />
+              <Controller
+                name="address"
+                control={control}
+                defaultValue={infoUser.address ?? ""}
+                render={({ field }) => {
+                  return (
+                    <Field
+                      {...field}
+                      isInput={false}
+                      title="Address"
+                      placeholder="Enter your address"
+                      error={errors.address?.message}
+                    />
+                  );
+                }}
+              />
+              <Controller
+                name="description"
+                control={control}
+                defaultValue={infoUser.description ?? ""}
+                render={({ field }) => {
+                  return (
+                    <Field
+                      {...field}
+                      isInput={false}
+                      title="Description"
+                      placeholder="Enter your description"
+                      error={errors.description?.message}
+                    />
+                  );
+                }}
+              />
+            </div>
             <Button type="submit" fullwidth size={Size.small}>
               {isSubmitting ? <LoadingSpinner /> : "Save"}
             </Button>

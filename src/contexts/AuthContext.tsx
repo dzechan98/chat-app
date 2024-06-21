@@ -21,28 +21,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     if (currentUser) {
-      SignOutUser();
+      await SignOutUser();
       setCurrentUser(null);
-      updateUser(currentUser.uid, {
+      await updateUser(currentUser.uid, {
         active: false,
       });
+      saveDataToLocalStorage("user", null);
     }
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user: User | null) => {
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       setCurrentUser(user);
+      if (user) {
+        saveDataToLocalStorage("user", user);
+        updateUser(user.uid, {
+          active: true,
+          time: moment(new Date()).format(),
+        });
+      } else {
+        saveDataToLocalStorage("user", null);
+      }
     });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    saveDataToLocalStorage("user", currentUser);
-    if (currentUser) {
-      updateUser(currentUser.uid, {
-        active: true,
-        time: moment(new Date()).format(),
-      });
-    }
+    let isPageHidden = false;
+
+    const handleVisibilityChange = () => {
+      isPageHidden = document.visibilityState === "hidden";
+    };
+
+    const handlePageHide = (event: PageTransitionEvent) => {
+      if (!event.persisted && isPageHidden && currentUser) {
+        signOut();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", handlePageHide);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", handlePageHide);
+    };
   }, [currentUser]);
 
   return (

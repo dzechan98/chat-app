@@ -20,6 +20,9 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
 }) => {
   const handleDeleteMessage = async () => {
     const result = await Swal.fire({
+      customClass: {
+        container: "my-swal",
+      },
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -41,6 +44,9 @@ const MenuActionMessage: React.FC<MenuActionMessageProps> = ({
         return message;
       });
       await Swal.fire({
+        customClass: {
+          container: "my-swal",
+        },
         title: "Deleted!",
         text: "Your message has been deleted.",
         icon: "success",

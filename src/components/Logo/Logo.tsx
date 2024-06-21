@@ -9,10 +9,7 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ logoString = true }) => {
   return (
-    <Link
-      to={paths.chat}
-      className="center sm:mb-5 md:mb-10 flex items-center gap-1"
-    >
+    <Link to={paths.chat} className="center flex items-center gap-1">
       <LogoIcon />
       {logoString && (
         <span className="font-bold text-xl text-main-100">Chat via</span>

@@ -9,11 +9,12 @@ import { uid } from "uid";
 import { paths } from "@/constants";
 import { useNavigate } from "react-router-dom";
 import { showTitleSplit } from "@/utils";
-import { useRoom } from "@/contexts";
+import { useModalRoomChat, useRoom } from "@/contexts";
 
 const ListUsers = () => {
   const { currentUser } = useAuth();
   const { setRoomId } = useRoom();
+  const { setIsOpenModal } = useModalRoomChat();
   const navigate = useNavigate();
   const [listUsers, setListUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ const ListUsers = () => {
       };
       const room = await createAndGetRoom(currentRoom);
       setRoomId(room.roomId);
+      setIsOpenModal(true);
       navigate(`${paths.chat}/${room.roomId}`);
     }
   };

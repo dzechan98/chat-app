@@ -3,9 +3,9 @@ import { cva } from "class-variance-authority";
 import { IoMdTime, IoMdMore } from "react-icons/io";
 import { Avatar } from "@/components/Avatar";
 import { Popover } from "@/components/Popover";
-import { ListImage, Room, Size, TypeMessage } from "@/interfaces";
+import { ListImage, Room, TypeMessage } from "@/interfaces";
 import moment from "moment";
-import { useDisclosure, useFetchUserById } from "@/hooks";
+import { useDisclosure, useFetchUserById, useWidth } from "@/hooks";
 import EditMessageModal from "@/components/Message/EditMessageModal";
 import MenuActionMessage from "@/components/Message/MenuActionMessage";
 import ImageMessage from "@/components/Message/ImageMessage";
@@ -27,20 +27,20 @@ const messageWrapper = cva("w-full flex relative group", {
       right: "justify-end",
     },
     hidden: {
-      true: "mb-1",
+      true: "-mb-1",
       false: "mb-7",
     },
   },
 });
 
 const messageStyle = cva(
-  "relative max-w-[400px] rounded-md p-2 bottom-[100%]",
+  "relative max-w-[220px] sm:max-w-[300px] md:max-w-[400px] rounded-md p-2 bottom-[100%]",
   {
     variants: {
       position: {
-        left: "bg-primary text-light left-12 before:left-0 before:border-r-transparent before:border-l-primary",
+        left: "bg-primary text-light left-9 md:left-12 before:left-0 before:border-r-transparent before:border-l-primary",
         right:
-          "bg-main-400 text-main-100 right-12  before:right-0 before:border-l-transparent before:border-r-main-400",
+          "bg-main-400 text-main-100 right-9 md:right-12  before:right-0 before:border-l-transparent before:border-r-main-400",
       },
       hidden: {
         true: "",
@@ -90,6 +90,7 @@ const Message: React.FC<MessageProps> = ({
   const sliderImageDisclosure = useDisclosure();
   const [indexSelected, setIndexSelected] = useState(-1);
   const { infoUser } = useFetchUserById(sender);
+  const { width } = useWidth();
 
   const handleOpenModalSliderImage = () => {
     if (!isDelete) {
@@ -101,7 +102,7 @@ const Message: React.FC<MessageProps> = ({
 
   return (
     <div
-      className={`relative flex flex-col ${
+      className={`relative flex flex-col mb-3 ${
         position === "left" ? "items-start" : "items-end"
       }`}
     >
@@ -113,14 +114,13 @@ const Message: React.FC<MessageProps> = ({
           <ImageMessage
             url={!isDelete ? imageURL : imageDefault}
             className={`relative group ${
-              position === "left" ? "left-12" : "right-12"
+              position === "left" ? "left-9 md:left-12" : "right-9 md:right-12"
             } ${hidden ? "mb-1" : ""} ${isDelete ? "" : "cursor-pointer"}`}
             onClick={handleOpenModalSliderImage}
           >
             {position === "right" && !isDelete && (
               <div className={moreIcon()}>
                 <Popover
-                  size={Size.medium}
                   render={
                     <MenuActionMessage
                       room={room}
@@ -129,7 +129,7 @@ const Message: React.FC<MessageProps> = ({
                       onOpen={editDisclosure.onOpen}
                     />
                   }
-                  position={position}
+                  position={width >= 768 ? "center" : "top-right"}
                 >
                   <span>
                     <IoMdMore />
@@ -162,7 +162,6 @@ const Message: React.FC<MessageProps> = ({
               {position === "right" && !isDelete && (
                 <div className={moreIcon()}>
                   <Popover
-                    size={Size.medium}
                     render={
                       <MenuActionMessage
                         room={room}
@@ -170,7 +169,7 @@ const Message: React.FC<MessageProps> = ({
                         onOpen={editDisclosure.onOpen}
                       />
                     }
-                    position={position}
+                    position={width >= 768 ? "center" : "top-right"}
                   >
                     <span>
                       <IoMdMore />

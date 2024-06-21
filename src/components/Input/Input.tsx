@@ -36,7 +36,11 @@ const Input: React.FC<InputProps> = ({
           {icon}
         </div>
       )}
-      <div className="w-full py-2 px-4 border relative rounded-md md:rounded-s-none border-light-200">
+      <div
+        className={`w-full py-2 px-4 border relative rounded-md  border-light-200 ${
+          icon ? "md:rounded-s-none" : ""
+        }`}
+      >
         {isInput ? (
           <input
             id={name}

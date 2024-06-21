@@ -3,14 +3,11 @@ import { Title } from "@/components/Title";
 import { useAuth } from "@/contexts";
 import { useFetchUserById, useTitle } from "@/hooks";
 import { FaRegUser } from "react-icons/fa";
-import { Button } from "@/components/Button";
-import { useNavigate } from "react-router-dom";
-import { paths } from "@/constants";
+
 import { LoadingLogo } from "@/components/Loading";
 
 const Profile = () => {
   useTitle("Profile");
-  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { loading, infoUser } = useFetchUserById(currentUser?.uid);
 
@@ -27,11 +24,8 @@ const Profile = () => {
       {loading && <LoadingLogo />}
       {!loading && (
         <>
-          <div className="px-6 flex items-center justify-between">
+          <div className="px-6 flex items-center">
             <Title className="text-xl text-main-100">My profile</Title>
-            <Button onClick={() => navigate(paths.updateProfile)}>
-              Update profile
-            </Button>
           </div>
           <Info
             photoURL={infoUser.photoURL as string}
