@@ -179,11 +179,7 @@ const UserChat: React.FC<UserChatProps> = ({ room }) => {
     >
       {Object.keys(infoUser).length > 0 && (
         <>
-          <Avatar
-            url={String(infoUser.photoURL)}
-            iconActive
-            active={infoUser.active}
-          />
+          <Avatar url={String(infoUser.photoURL)} />
           <div className="flex flex-col">
             <h2 className="font-medium text-main-100">
               {infoUser.displayName}

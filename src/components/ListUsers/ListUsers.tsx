@@ -86,11 +86,7 @@ const ListUsers = () => {
                   {showTitleSplit(String(user.displayName?.split(" ")[0]), 9)}
                 </h2>
                 <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <Avatar
-                    url={String(user.photoURL)}
-                    iconActive
-                    active={user.active}
-                  />
+                  <Avatar url={String(user.photoURL)} />
                 </div>
               </div>
             </div>

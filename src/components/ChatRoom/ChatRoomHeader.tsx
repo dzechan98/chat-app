@@ -1,6 +1,5 @@
 import React from "react";
 import { Avatar } from "@/components/Avatar";
-import { DotStatus } from "@/components/DotStatus";
 import { Popover } from "@/components/Popover";
 import { Title } from "@/components/Title";
 import { IoIosMore } from "react-icons/io";
@@ -49,7 +48,6 @@ const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({
             )}
             <Avatar url={String(infoUser.photoURL)} />
             <Title>{infoUser.displayName}</Title>
-            <DotStatus active={infoUser.active} />
           </div>
           <div className="center gap-5 cursor-pointer">
             <Popover

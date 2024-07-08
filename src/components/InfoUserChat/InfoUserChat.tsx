@@ -67,7 +67,6 @@ const InfoUserChat: React.FC<InfoUserChatProps> = ({
     >
       <Info
         photoURL={infoUser.photoURL as string}
-        active={infoUser.active}
         displayName={infoUser.displayName as string}
         menuInfoAccordion={menuAccordion}
       />

@@ -1,4 +1,3 @@
-import { DotStatus } from "@/components/DotStatus";
 import { LoadingSpinner } from "@/components/Loading";
 import { Size } from "@/interfaces";
 import { cva } from "class-variance-authority";
@@ -6,8 +5,6 @@ import React from "react";
 
 interface AvatarProps {
   url: string;
-  iconActive?: boolean;
-  active?: boolean;
   size?: Size;
   overlay?: boolean;
   className?: string;
@@ -25,8 +22,6 @@ const img = cva("rounded-full max-w-none object-cover", {
 
 const Avatar: React.FC<AvatarProps> = ({
   url,
-  iconActive,
-  active,
   size = Size.medium,
   overlay,
   className = "",
@@ -34,9 +29,6 @@ const Avatar: React.FC<AvatarProps> = ({
   return (
     <div className={`relative cursor-pointer ${className}`}>
       <img src={url} alt="avatar-user" className={img({ size })} />
-      {iconActive && (
-        <DotStatus className="absolute right-0 bottom-0" active={active} />
-      )}
       {overlay && (
         <div className="absolute inset-0 center bg-primary/50 rounded-full">
           <LoadingSpinner />

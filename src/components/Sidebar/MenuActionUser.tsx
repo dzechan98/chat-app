@@ -1,5 +1,4 @@
 import { RiProfileLine } from "react-icons/ri";
-import { IoSettingsOutline } from "react-icons/io5";
 import { GoSignOut } from "react-icons/go";
 import { useAuth } from "@/contexts";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +16,9 @@ const MenuActionUser = () => {
         navigate(paths.profile);
       },
     },
+
     {
       id: 2,
-      title: "Setting",
-      icon: <IoSettingsOutline />,
-      onClick: () => {},
-    },
-    {
-      id: 3,
       title: "Sign out",
       icon: <GoSignOut />,
       onClick: signOut,

@@ -2,10 +2,7 @@ import { User } from "@/interfaces";
 import moment from "moment";
 import React from "react";
 
-type InfoUserAccordionProps = Omit<
-  User,
-  "userId" | "active" | "keyword" | "photoURL"
->;
+type InfoUserAccordionProps = Omit<User, "userId" | "keyword" | "photoURL">;
 
 const InfoUserAccordion: React.FC<InfoUserAccordionProps> = ({
   displayName,

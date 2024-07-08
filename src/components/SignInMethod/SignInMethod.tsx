@@ -31,7 +31,6 @@ const SignInMethod = () => {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
-          active: true,
           keyword: generateKeywords(user.displayName as string),
           timeStartJoin: moment(new Date()).format(),
         };

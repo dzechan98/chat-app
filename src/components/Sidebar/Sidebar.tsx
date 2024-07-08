@@ -32,7 +32,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="fixed z-[10000] w-full px-6 lg:z-0 lg:px-0 h-20 bottom-0 bg-layout lg:py-8 lg:relative lg:w-[75px] lg:min-w-[75px] lg:max-h-screen flex items-center justify-between lg:flex-col lg:h-screen shadow-2xl">
+    <div className="fixed z-[10000] w-full px-6 lg:z-10 lg:px-0 h-20 bottom-0 bg-layout lg:py-8 lg:relative lg:w-[75px] lg:min-w-[75px] lg:max-h-screen flex items-center justify-between lg:flex-col lg:h-screen shadow-2xl">
       <Logo logoString={false} />
       <div className="center lg:flex-col gap-2">
         {menuSidebar.map((item) => (

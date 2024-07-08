@@ -29,7 +29,6 @@ const Profile = () => {
           </div>
           <Info
             photoURL={infoUser.photoURL as string}
-            active={infoUser.active}
             displayName={infoUser.displayName as string}
             menuInfoAccordion={menuInfoAccordion}
           />

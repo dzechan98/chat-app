@@ -70,7 +70,6 @@ const SignUp = () => {
           displayName,
           email: res.user.email,
           photoURL: defaultUserImage,
-          active: true,
           keyword: generateKeywords(displayName),
           timeStartJoin: moment(new Date()).format(),
         };
